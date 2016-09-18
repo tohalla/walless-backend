@@ -1,0 +1,2 @@
+migrations/*
+knexfile.js
