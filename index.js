@@ -1,14 +1,20 @@
 // @flow
-import http from 'http';
 import postgraphql from 'postgraphql';
+import express from 'express';
 
 import dbConfig from './db';
+import translation from './translation';
 
-http
-  .createServer(postgraphql(
-    dbConfig.pg,
-    {
-      development: process.env.NODE_ENV === 'development'
-    }
-  ))
+const app = express();
+
+app
+  .use('/',
+    postgraphql(
+      dbConfig.pg,
+      {
+        development: process.env.NODE_ENV === 'development'
+      }
+    )
+  )
+  .use('/translation', translation)
   .listen(3000);

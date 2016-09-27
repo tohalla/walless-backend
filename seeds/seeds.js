@@ -14,6 +14,8 @@ exports.seed = knex =>
     .then(() => knex('user').del())
     .then(() => knex('vendor').del())
     .then(() => knex('email').del())
+    .then(() => knex('translation.translation').del())
+    .then(() => knex('translation.language').del())
     .then(() => seedFile(knex, path.resolve('./seeds/email.csv'), 'email', [
       'id',
       'email',
@@ -30,7 +32,7 @@ exports.seed = knex =>
       'id',
       'name',
       'description',
-      'createdBy'
+      'created_by'
     ], options))
     .then(() => seedFile(knex, path.resolve('./seeds/vendor.csv'), 'vendor', [
       'id',
@@ -39,5 +41,15 @@ exports.seed = knex =>
     .then(() => seedFile(knex, path.resolve('./seeds/vendor_email.csv'), 'vendor_email', [
       'vendor',
       'email'
-    ], options)
-  );
+    ], options))
+    .then(() => seedFile(knex, path.resolve('./seeds/translation/language.csv'), 'translation.language', [
+      'locale',
+      'name',
+      'language_code',
+      'language_short_code'
+    ], options))
+    .then(() => seedFile(knex, path.resolve('./seeds/translation/en.csv'), 'translation.translation', [
+      'language',
+      'key',
+      'translation'
+    ], options));
