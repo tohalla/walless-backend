@@ -28,9 +28,14 @@ export default express()
   })
   .get('/:lang', async(req, res, next) => {
     res.set('Content-Type', 'application/json; charset=utf-8');
-    res.send(await get(
-      'SELECT translation.* FROM translation.language JOIN translation.translation ON translation.language = locale WHERE locale = $1::text',
-      [req.params.lang]
-    ));
+    res.send(
+      (await get(
+        'SELECT translation.key, translation.translation FROM translation.language JOIN translation.translation ON translation.language = locale WHERE locale = $1::text',
+        [req.params.lang]
+      ))
+        .reduce((prev, curr) =>
+          Object.assign({}, prev, {[curr.key]: curr.translation}), {}
+        )
+    );
     return next();
   });
