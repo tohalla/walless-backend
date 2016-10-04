@@ -6,7 +6,7 @@ exports.up = knex =>
     table.string('name', 128);
     table.string('description', 255);
   })
-    .then(() => knex.schema.createTable('user', table => {
+    .then(() => knex.schema.createTable('account', table => {
       table.increments(); // id
       table.timestamp('created_at').notNullable().defaultTo('now()');
       table.timestamp('updated_at');
@@ -22,5 +22,5 @@ exports.up = knex =>
   );
 
 exports.down = knex =>
-  knex.schema.dropTable('user')
+  knex.schema.dropTable('account')
     .then(() => knex.schema.dropTable('email'));

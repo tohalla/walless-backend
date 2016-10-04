@@ -7,13 +7,13 @@ exports.up = knex =>
     table.string('name', 128).notNullable().comment('Name field');
   })
   .then(() =>
-    knex.schema.createTable('user_role', table => {
+    knex.schema.createTable('account_role', table => {
       table.increments();
       table.timestamp('created_at').notNullable().defaultTo('now()');
       table.timestamp('updated_at');
       table.string('name', 128).notNullable().comment('Name field');
       table.string('description', 255)
-        .comment('Description field for user level');
+        .comment('Description field for account level');
       table.integer('created_by')
         .references('vendor.id')
         .nullable()
@@ -23,19 +23,19 @@ exports.up = knex =>
     })
   )
   .then(() =>
-    knex.schema.createTable('vendor_user', table => {
+    knex.schema.createTable('vendor_account', table => {
       table.integer('vendor')
         .references('vendor.id')
         .unsigned()
         .index()
         .notNullable();
-      table.integer('user')
-        .references('user.id')
+      table.integer('account')
+        .references('account.id')
         .index()
         .unsigned()
         .notNullable();
       table.integer('role')
-        .references('user_role.id')
+        .references('account_role.id')
         .unsigned()
         .notNullable();
     })
@@ -55,7 +55,7 @@ exports.up = knex =>
   );
 
 exports.down = knex =>
-  knex.schema.dropTable('vendor_user')
-    .then(() => knex.schema.dropTable('user_role'))
+  knex.schema.dropTable('vendor_account')
+    .then(() => knex.schema.dropTable('account_role'))
     .then(() => knex.schema.dropTable('vendor_email'))
     .then(() => knex.schema.dropTable('vendor'));
