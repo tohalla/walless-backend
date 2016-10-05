@@ -7,10 +7,7 @@ exports.up = knex =>
       table.string('language_code', 3).comment('ISO 639-2 Code');
       table.string('language_short_code', 2).comment('ISO 639-1 Code');
     })
-  ).then(() => {
-    knex.schema.withSchema('translation').table('language', table => {
-    });
-  })
+  )
   .then(() =>
     knex.schema.withSchema('translation').createTable('translation', table => {
       table.string('key', 128).notNullable().comment('Translation key');
