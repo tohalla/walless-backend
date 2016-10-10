@@ -1,9 +1,11 @@
 // @flow
 import postgraphql from 'postgraphql';
 import express from 'express';
+import bodyParser from 'body-parser';
 
 import dbConfig from './db';
 import translation from './translation';
+import auth from './auth';
 
 const app = express();
 
@@ -14,8 +16,8 @@ app
       'public',
       {
         development: process.env.NODE_ENV === 'development',
-        secret: process.env.tokenSecret,
-        anonymousRole: 'guest'
+        secret: process.env.JWT_SECRET,
+        anonymousRole: 'postgres'
       }
     )
   )
@@ -26,7 +28,10 @@ app
       'Access-Control-Allow-Headers',
       'Origin, X-Requested-With, Content-Type, Accept'
     );
+    res.header('Content-Type', 'application/json; charset=utf-8');
     return next();
   })
   .use('/translation', translation)
+  .use(bodyParser.json())
+  .use('/auth', auth)
   .listen(8080);

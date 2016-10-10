@@ -7,10 +7,11 @@ exports.up = knex =>
         .integer('id')
         .unsigned()
         .primary()
-        .references('id').inTable('public.login')
+        .references('id').inTable('public.account')
         .onDelete('CASCADE');
-      table.string('password', 512).notNullable();
-      table.string('role', 255);
+      table.text('password');
+      table.string('role', 255).defaultTo('authenticated_user');
+      table.boolean('validated').notNullable().defaultTo(false);
     }))
     .then(() => knex.schema.withSchema('auth').createTable('validation_token', table => {
       table
@@ -18,12 +19,12 @@ exports.up = knex =>
         .primary();
       table.timestamp('created_at').notNullable().defaultTo('now()');
       table.integer('account')
-        .references('id').inTable('public.account')
+        .references('id').inTable('auth.login')
         .onDelete('CASCADE');
     }));
 
 exports.down = knex =>
-  knex.schema.withSchema('auth').dropTable('login')
-    .then(() => knex.schema.withSchema('auth').dropTable('validation_token'))
+  knex.schema.withSchema('auth').dropTable('validation_token')
+    .then(() => knex.schema.withSchema('auth').dropTable('login'))
     .then(() => knex.raw('DROP EXTENSION IF EXISTS pgcrypto'))
     .then(() => knex.raw('DROP SCHEMA auth'));

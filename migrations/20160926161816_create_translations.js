@@ -10,8 +10,8 @@ exports.up = knex =>
   )
   .then(() =>
     knex.schema.withSchema('translation').createTable('translation', table => {
-      table.string('key', 128).notNullable().comment('Translation key');
-      table.string('translation', 2048).comment('Translation');
+      table.text('key').notNullable().comment('Translation key');
+      table.text('translation').comment('Translation');
       table
         .string('language', 5)
         .references('locale').inTable('translation.language')

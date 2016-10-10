@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "NODE_ENV=development nodemon --exec babel-node $npm_package_main",
+    "watch": "NODE_ENV=development JWT_SECRET=placeholder nodemon --exec babel-node $npm_package_main",
     "migrate": "knex migrate:latest --knexfile \"db.js\"",
     "lint": "eslint ."
   },
@@ -18,6 +18,7 @@
     "babel-plugin-transform-es2015-destructuring": "^6.9.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.14.0",
     "babel-plugin-transform-es2015-parameters": "^6.11.4",
+    "babel-plugin-transform-es2015-shorthand-properties": "^6.8.0",
     "babel-plugin-transform-flow-strip-types": "^6.14.0",
     "eslint": "^3.5.0",
     "eslint-config-cleanjs": "^4.0.0",
@@ -28,13 +29,16 @@
     "eslint-plugin-import": "^1.14.0",
     "flow-bin": "^0.32.0",
     "knex": "^0.12.1",
-    "knex-seed-file": "file:///Users/Touko/Documents/Omat projektit/muu/knex-seed-file",
+    "knex-seed-file": "^0.2.0",
     "nodemon": "^1.10.2",
     "tape": "^4.6.0"
   },
   "dependencies": {
+    "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "humps": "^1.1.0",
     "immutable": "^3.8.1",
+    "jsonwebtoken": "^7.1.9",
     "pg": "^6.1.0",
     "postgraphql": "^1.9.3"
   },
@@ -48,7 +52,8 @@
       "transform-class-properties",
       "transform-es2015-parameters",
       "transform-async-to-generator",
-      "transform-es2015-destructuring"
+      "transform-es2015-destructuring",
+      "transform-es2015-shorthand-properties"
     ]
   }
 }

@@ -2,9 +2,9 @@
 exports.up = knex =>
   knex.schema.createTable('email', table => {
     table.increments(); // id
-    table.string('email', 128).notNullable();
-    table.string('name', 128);
-    table.string('description', 255);
+    table.string('email', 255).notNullable();
+    table.string('name', 255);
+    table.text('description');
   })
     .then(() => knex.schema.createTable('account', table => {
       table.increments(); // id
