@@ -9,10 +9,10 @@ const options = {
 };
 
 exports.seed = knex =>
-  knex('vendor_email').del()
+  knex('restaurant_email').del()
     .then(() => knex('account_role').del())
     .then(() => knex('account').del())
-    .then(() => knex('vendor').del())
+    .then(() => knex('restaurant').del())
     .then(() => knex('email').del())
     .then(() => knex('translation.translation').del())
     .then(() => knex('translation.language').del())
@@ -34,12 +34,12 @@ exports.seed = knex =>
       'description',
       'created_by'
     ], options))
-    .then(() => seedFile(knex, path.resolve('./seeds/vendor.csv'), 'vendor', [
+    .then(() => seedFile(knex, path.resolve('./seeds/restaurant.csv'), 'restaurant', [
       'id',
       'name'
     ], options))
-    .then(() => seedFile(knex, path.resolve('./seeds/vendor_email.csv'), 'vendor_email', [
-      'vendor',
+    .then(() => seedFile(knex, path.resolve('./seeds/restaurant_email.csv'), 'restaurant_email', [
+      'restaurant',
       'email'
     ], options))
     .then(() => seedFile(knex, path.resolve('./seeds/translation/language.csv'), 'translation.language', [

@@ -1,6 +1,6 @@
 /* eslint-disable import/no-commonjs, fp/no-mutation, better/explicit-return, fp/no-nil */
 exports.up = knex =>
-  knex.schema.createTable('vendor', table => {
+  knex.schema.createTable('restaurant', table => {
     table.increments(); // id
     table.timestamp('created_at').notNullable().defaultTo('now()');
     table.timestamp('updated_at');
@@ -15,7 +15,8 @@ exports.up = knex =>
       table.string('description', 255)
         .comment('Description field for account level');
       table.integer('created_by')
-        .references('vendor.id')
+        .references('restaurant.id')
+        .onDelete('CASCADE')
         .nullable()
         .index()
         .defaultTo(null)
@@ -23,14 +24,16 @@ exports.up = knex =>
     })
   )
   .then(() =>
-    knex.schema.createTable('vendor_account', table => {
-      table.integer('vendor')
-        .references('vendor.id')
+    knex.schema.createTable('restaurant_account', table => {
+      table.integer('restaurant')
+        .references('restaurant.id')
+        .onDelete('CASCADE')
         .unsigned()
         .index()
         .notNullable();
       table.integer('account')
         .references('account.id')
+        .onDelete('CASCADE')
         .index()
         .unsigned()
         .notNullable();
@@ -38,24 +41,28 @@ exports.up = knex =>
         .references('account_role.id')
         .unsigned()
         .notNullable();
+      table.primary(['restaurant', 'account', 'role']);
     })
   )
   .then(() =>
-    knex.schema.createTable('vendor_email', table => {
-      table.integer('vendor')
-        .references('vendor.id')
+    knex.schema.createTable('restaurant_email', table => {
+      table.integer('restaurant')
+        .references('restaurant.id')
+        .onDelete('CASCADE')
         .index()
         .unsigned()
         .notNullable();
       table.integer('email')
         .references('email.id')
+        .onDelete('CASCADE')
         .unsigned()
         .notNullable();
+      table.primary(['restaurant', 'email']);
     })
   );
 
 exports.down = knex =>
-  knex.schema.dropTable('vendor_account')
+  knex.schema.dropTable('restaurant_account')
     .then(() => knex.schema.dropTable('account_role'))
-    .then(() => knex.schema.dropTable('vendor_email'))
-    .then(() => knex.schema.dropTable('vendor'));
+    .then(() => knex.schema.dropTable('restaurant_email'))
+    .then(() => knex.schema.dropTable('restaurant'));
