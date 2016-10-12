@@ -109,11 +109,26 @@ AS $$
       crypt(authenticate.password, login.password) = login.password
     INTO result;
     IF result IS null THEN
-      RAISE invalid_password USING MESSAGE = 'invalid login information';
+      UPDATE auth.login SET last_login_attempt = now() WHERE login.id = (
+        SELECT account.id FROM account
+          JOIN email ON account.email = email.id AND authenticate.email = email.email
+      );
+      RETURN null;
     END IF;
+    UPDATE auth.login SET last_successful_login = now() WHERE login.id = (
+        SELECT account.id FROM account
+          JOIN email ON account.email = email.id AND authenticate.email = email.email
+    );
     RETURN result;
   END;
 $$ LANGUAGE plpgsql
+  `))
+  .then(() => knex.raw(`
+CREATE OR REPLACE FUNCTION get_active_account() RETURNS account
+AS $$
+  SELECT * FROM account
+    WHERE account.id = current_setting('jwt.claims.account_id')::INTEGER
+$$ LANGUAGE sql stable
   `))
   .then('GRANT EXECUTE ON FUNCTION login(integer, text) TO guest');
 
@@ -127,4 +142,5 @@ exports.down = knex =>
   .then(() => knex.raw('DROP FUNCTION auth.validation_token_exists()'))
   .then(() => knex.raw('DROP FUNCTION auth.create_login()'))
   .then(() => knex.raw('DROP FUNCTION auth.encrypt_password()'))
+  .then(() => knex.raw('DROP FUNCTION auth.get_active_account()'))
   .then(() => knex.raw('DROP TYPE auth.jwt_claim'));

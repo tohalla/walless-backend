@@ -31,7 +31,8 @@ export default express()
           [email, password]
         ))[0];
         const token = await jwt.sign(claim, process.env.JWT_SECRET, {
-          subject: 'postgraphql'
+          subject: 'postgraphql',
+          audience: 'postgraphql'
         });
         res.json({token});
       } catch (err) {
@@ -44,7 +45,8 @@ export default express()
   })
   .post('/account', async (req, res, next) => {
     const claim = await jwt.verify(req.body.token, process.env.JWT_SECRET, {
-      subject: 'postgraphql'
+      subject: 'postgraphql',
+      audience: 'postgraphql'
     });
     const user = (await query(`
       SELECT

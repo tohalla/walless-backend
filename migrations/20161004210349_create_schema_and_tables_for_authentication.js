@@ -10,6 +10,10 @@ exports.up = knex =>
         .references('id').inTable('public.account')
         .onDelete('CASCADE');
       table.text('password');
+      table.timestamp('last_successful_login');
+      table
+        .timestamp('last_login_attempt')
+        .comment('records failed login attempts');
       table.string('role', 255).defaultTo('authenticated_user');
       table.boolean('validated').notNullable().defaultTo(false);
     }))
