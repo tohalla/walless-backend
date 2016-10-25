@@ -1,6 +1,6 @@
 /* eslint-disable import/no-commonjs, fp/no-mutation, better/explicit-return, fp/no-nil */
 exports.up = knex => knex
-  .raw('CREATE TYPE auth.jwt_claim AS (role text, account_id integer, exp integer)')
+  .raw('CREATE TYPE auth.jwt_claim AS (role TEXT, account_id INTEGER, exp INTEGER)')
   .then(() => knex.raw(`
 CREATE OR REPLACE FUNCTION auth.generate_validation_token() RETURNS TRIGGER
 AS $$
@@ -50,7 +50,7 @@ AS $$
 $$ LANGUAGE plpgsql
     `))
   .then(() => knex.raw(`
-CREATE OR REPLACE FUNCTION auth.validation_token_exists(account_id integer, token text) RETURNS BOOLEAN
+CREATE OR REPLACE FUNCTION auth.validation_token_exists(account_id INTEGER, token TEXT) RETURNS BOOLEAN
 AS $$
   BEGIN
     RETURN EXISTS(SELECT FROM auth.validation_token WHERE account = account_id AND validation_token.token = validation_token_exists.token);
@@ -73,7 +73,7 @@ CREATE TRIGGER generate_validation_token
     FOR EACH ROW EXECUTE PROCEDURE auth.generate_validation_token();
   `))
   .then(() => knex.raw(`
-CREATE OR REPLACE FUNCTION auth.authenticate(id integer, password text) RETURNS auth.jwt_claim
+CREATE OR REPLACE FUNCTION auth.authenticate(id INTEGER, password TEXT) RETURNS auth.jwt_claim
 AS $$
   DECLARE result auth.jwt_claim;
   BEGIN
@@ -94,7 +94,7 @@ AS $$
 $$ LANGUAGE plpgsql
   `))
   .then(() => knex.raw(`
-CREATE OR REPLACE FUNCTION auth.authenticate(email text, password text) RETURNS auth.jwt_claim
+CREATE OR REPLACE FUNCTION auth.authenticate(email TEXT, password TEXT) RETURNS auth.jwt_claim
 AS $$
   DECLARE result auth.jwt_claim;
   BEGIN
@@ -130,17 +130,17 @@ AS $$
     WHERE account.id = current_setting('jwt.claims.account_id')::INTEGER
 $$ LANGUAGE sql stable
   `))
-  .then('GRANT EXECUTE ON FUNCTION login(integer, text) TO guest');
+  .then('GRANT EXECUTE ON FUNCTION login(INTEGER, TEXT) TO guest');
 
 exports.down = knex =>
-  knex.raw('DROP FUNCTION auth.authenticate(integer, text)')
-  .then(() => knex.raw('DROP FUNCTION auth.authenticate(text, text)'))
+  knex.raw('DROP FUNCTION auth.authenticate(INTEGER, TEXT)')
+  .then(() => knex.raw('DROP FUNCTION auth.authenticate(TEXT, TEXT)'))
   .then(() => knex.raw('DROP TRIGGER generate_validation_token ON auth.login'))
   .then(() => knex.raw('DROP TRIGGER encrypt_password ON auth.login'))
   .then(() => knex.raw('DROP TRIGGER create_login ON account'))
   .then(() => knex.raw('DROP FUNCTION auth.generate_validation_token()'))
-  .then(() => knex.raw('DROP FUNCTION auth.validation_token_exists()'))
+  .then(() => knex.raw('DROP FUNCTION auth.validation_token_exists(INTEGER, TEXT)'))
   .then(() => knex.raw('DROP FUNCTION auth.create_login()'))
   .then(() => knex.raw('DROP FUNCTION auth.encrypt_password()'))
-  .then(() => knex.raw('DROP FUNCTION auth.get_active_account()'))
+  .then(() => knex.raw('DROP FUNCTION get_active_account()'))
   .then(() => knex.raw('DROP TYPE auth.jwt_claim'));

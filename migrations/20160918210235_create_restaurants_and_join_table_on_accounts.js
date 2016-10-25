@@ -4,7 +4,8 @@ exports.up = knex =>
     table.increments(); // id
     table.timestamp('created_at').notNullable().defaultTo('now()');
     table.timestamp('updated_at');
-    table.string('name', 128).notNullable().comment('Name field');
+    table.string('name', 255).notNullable().comment('Name field');
+    table.text('description');
   })
   .then(() =>
     knex.schema.createTable('account_role', table => {
@@ -12,7 +13,7 @@ exports.up = knex =>
       table.timestamp('created_at').notNullable().defaultTo('now()');
       table.timestamp('updated_at');
       table.string('name', 128).notNullable().comment('Name field');
-      table.string('description', 255)
+      table.text('description')
         .comment('Description field for account level');
       table.integer('created_by')
         .references('restaurant.id')

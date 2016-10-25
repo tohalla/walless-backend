@@ -34,6 +34,24 @@ exports.seed = knex =>
       'description',
       'created_by'
     ], options))
+    .then(() => seedFile(knex, path.resolve('./seeds/restaurant_role_rights.csv'), 'restaurant_role_rights', [
+      'id',
+      'role',
+      'restaurant',
+      'allow_add_promotion',
+      'allow_alter_promotion',
+      'allow_delete_promotion',
+      'allow_add_menu',
+      'allow_alter_menu',
+      'allow_delete_menu',
+      'allow_add_menu_item',
+      'allow_alter_menu_item',
+      'allow_delete_menu_item',
+      'allow_change_restaurant_description',
+      'allow_change_restaurant_name',
+      'allow_alter_restaurant_roles',
+      'allow_map_roles'
+    ], options))
     .then(() => seedFile(knex, path.resolve('./seeds/restaurant.csv'), 'restaurant', [
       'id',
       'name'

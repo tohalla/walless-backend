@@ -36,6 +36,6 @@ exports.up = knex =>
       }));
 
 exports.down = knex =>
-  knex.schema.dropTable('menu_item')
-    .then(() => knex.schema.dropTable('menu'))
-    .then(() => knex.schema.dropTable('menu_menu_item'));
+  knex.schema.dropTable('menu_menu_item')
+    .then(() => knex.schema.dropTable('menu_item'))
+    .then(() => knex.schema.dropTable('menu'));

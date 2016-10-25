@@ -15,3 +15,5 @@ dev.sqlite3
 *.log
 
 *.sublime-*
+
+yarn.lock
