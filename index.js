@@ -8,16 +8,16 @@ import translation from './translation';
 import auth from './auth';
 
 const app = express();
-
 app
-  .use('/graphql',
+  .use(
     postgraphql(
       dbConfig.pg,
       'public',
       {
         development: process.env.NODE_ENV === 'development',
         secret: process.env.JWT_SECRET,
-        anonymousRole: 'postgres'
+        anonymousRole: 'postgres',
+        watchPg: process.env.NODE_ENV === 'development'
       }
     )
   )

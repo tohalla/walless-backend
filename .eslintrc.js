@@ -8,6 +8,7 @@ module.exports = {
     'babel'
   ],
   rules: {
+    'comma-dangle': [2, 'never'],
     'arrow-parens': 0,
     'generator-star-spacing': 0,
     'fp/no-unused-expression': 0,
