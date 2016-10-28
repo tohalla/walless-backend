@@ -14,10 +14,13 @@ app
       dbConfig.pg,
       'public',
       {
+        enableCors: true, // should put api behind reverse proxy
         development: process.env.NODE_ENV === 'development',
-        secret: process.env.JWT_SECRET,
+        graphiql: process.env.NODE_ENV === 'development',
+        jwtSecret: process.env.JWT_SECRET,
         anonymousRole: 'postgres',
-        watchPg: process.env.NODE_ENV === 'development'
+        watchPg: process.env.NODE_ENV === 'development',
+        jwtPgTypeIdentifies: 'auth.jwt_claim'
       }
     )
   )
