@@ -18,7 +18,7 @@ app
         development: process.env.NODE_ENV === 'development',
         graphiql: process.env.NODE_ENV === 'development',
         jwtSecret: process.env.JWT_SECRET,
-        anonymousRole: 'postgres',
+        pgDefaultRole: 'guest',
         watchPg: process.env.NODE_ENV === 'development',
         jwtPgTypeIdentifies: 'auth.jwt_claim'
       }

@@ -43,24 +43,6 @@ export default express()
     }
     return next();
   })
-  .post('/account', async (req, res, next) => {
-    const claim = await jwt.verify(req.body.token, process.env.JWT_SECRET, {
-      subject: 'postgraphql',
-      audience: 'postgraphql'
-    });
-    const user = (await query(`
-      SELECT
-        account.first_name::TEXT,
-        account.last_name::TEXT,
-        email.email::TEXT,
-        account.id::INTEGER
-      FROM account
-        JOIN email ON account.email = email.id
-      WHERE account.id = $1::INTEGER
-    `, [claim.account_id]))[0];
-    res.json(camelizeKeys(user));
-    return next();
-  })
   .put('/', async (req, res, next) => {
     const {user, token} = req.body;
     if (token && user && user.id && user.password) {

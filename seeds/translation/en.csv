@@ -9,3 +9,13 @@ en;account.password;Password
 en;account.passwordForgotten;Did you forget your password?
 en;account.authenticated;Authenticated as %{name}
 en;account.signOut;Sign out
+en;restaurant.menus;Menus
+en;restaurant.menuItems;Menu items
+en;restaurant.users;Users
+en;restaurant.settings;Settings
+en;restaurant.dashboard;Dashboard
+en;restaurant.menus.creation.create
+en;restaurant.menus.creation.cancel
+en;restaurant.menus.creation.description
+en;restaurant.menus.creation.name
+en;settings;settings
