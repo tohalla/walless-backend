@@ -15,7 +15,7 @@ exports.up = knex =>
       table.string('name', 128).notNullable().comment('Name field');
       table.text('description')
         .comment('Description field for account level');
-      table.integer('created_by')
+      table.integer('restaurant')
         .references('restaurant.id')
         .onDelete('CASCADE')
         .nullable()
@@ -42,7 +42,7 @@ exports.up = knex =>
         .references('account_role.id')
         .unsigned()
         .notNullable();
-      table.primary(['restaurant', 'account', 'role']);
+      table.primary(['restaurant', 'account']);
     })
   )
   .then(() =>

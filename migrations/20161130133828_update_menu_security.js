@@ -2,7 +2,6 @@
 exports.up = knex =>
   knex.raw('GRANT SELECT ON menu TO guest')
   .then(() => knex.raw('GRANT INSERT, DELETE, UPDATE ON menu TO authenticated_user'))
-  .then(() => knex.raw('GRANT SELECT ON account_role TO authenticated_user'))
   .then(() => knex.raw('GRANT SELECT, USAGE on menu_id_seq to authenticated_user'))
   .then(() => knex.raw('ALTER TABLE menu ENABLE ROW LEVEL SECURITY'))
   .then(() => knex.raw(`

@@ -34,7 +34,7 @@ exports.seed = knex =>
       'id',
       'name',
       'description',
-      'created_by'
+      'restaurant'
     ], options))
     .then(() => seedFile(knex, path.resolve('./seeds/restaurant_role_rights.csv'), 'restaurant_role_rights', [
       'id',

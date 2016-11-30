@@ -15,8 +15,24 @@ exports.up = knex =>
         .index()
         .notNullable();
       table.text('description');
+    }))
+    .then(() => knex.schema.table('menu_item', table => {
+      table.integer('type')
+        .references('menu_item_type.id')
+        .unsigned()
+        .index();
+      table.integer('category')
+        .references('menu_item_category.id')
+        .unsigned()
+        .index();
     }));
 
 exports.down = knex =>
-  knex.schema.dropTable('menu_item_category')
+  knex.schema.table('menu_item', table => {
+    table.dropForeign('type');
+    table.dropColumn('type');
+    table.dropForeign('category');
+    table.dropColumn('category');
+  })
+    .then(() => knex.schema.dropTable('menu_item_category'))
     .then(() => knex.schema.dropTable('menu_item_type'));
