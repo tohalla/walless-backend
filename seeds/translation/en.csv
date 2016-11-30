@@ -14,8 +14,8 @@ en;restaurant.menuItems;Menu items
 en;restaurant.users;Users
 en;restaurant.settings;Settings
 en;restaurant.dashboard;Dashboard
-en;restaurant.menus.creation.create
-en;restaurant.menus.creation.cancel
-en;restaurant.menus.creation.description
-en;restaurant.menus.creation.name
-en;settings;settings
+en;restaurant.menus.creation.create;Create menu
+en;restaurant.menus.creation.cancel;Cancel
+en;restaurant.menus.creation.description;Description
+en;restaurant.menus.creation.name;Name
+en;settings;Settings

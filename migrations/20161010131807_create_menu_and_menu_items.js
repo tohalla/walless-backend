@@ -3,7 +3,7 @@ exports.up = knex =>
   knex.schema.createTable('menu', table => {
     table.increments(); // id
     table.string('name', 255).notNullable();
-    table.integer('created_by')
+    table.integer('restaurant')
       .references('restaurant.id')
       .index()
       .notNullable()
