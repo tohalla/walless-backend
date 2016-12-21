@@ -1,6 +1,5 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import {camelizeKeys} from 'humps';
 
 import {query} from './utilities/query';
 
@@ -10,18 +9,6 @@ const tokenIsValid = async (user, token) => (await query(
 ))[0].validation_token_exists;
 
 export default express()
-  .get('/validToken', async (req, res, next) => {
-    const {user, token} = req.query;
-    if (
-      user &&
-      token
-    ) {
-      res.json({isValid: await tokenIsValid(user, token)});
-      return next();
-    }
-    res.send({isValid: false});
-    return next();
-  })
   .post('/', async (req, res, next) => {
     const {email, password} = req.body;
     if (email && password) {
@@ -29,17 +16,32 @@ export default express()
         const claim = (await query(
           'SELECT * FROM auth.authenticate($1::TEXT, $2::TEXT)',
           [email, password]
-        ))[0];
+        ))[0]; // expires in 1h
         const token = await jwt.sign(claim, process.env.JWT_SECRET, {
           subject: 'postgraphql',
           audience: 'postgraphql'
         });
-        res.json({token});
+        res.json({token, expiresAt: claim.exp});
       } catch (err) {
         res.status(401).json(err);
       }
     } else {
       res.sendStatus(401);
+    }
+    return next();
+  })
+  .post('/renewToken', async (req, res, next) => {
+    const {token} = req.body;
+    try {
+      const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+      const {exp, iat, aud, sub, ...rest} = decoded; // eslint-disable-line
+      res.json(await jwt.sign(rest, process.env.JWT_SECRET, {
+        subject: 'postgraphql',
+        audience: 'postgraphql',
+        expiresIn: 3600
+      }));
+    } catch (err) {
+      console.log(err);
     }
     return next();
   })

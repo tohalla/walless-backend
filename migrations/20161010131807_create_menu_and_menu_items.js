@@ -5,6 +5,7 @@ exports.up = knex =>
     table.string('name', 255).notNullable();
     table.integer('created_by')
       .references('account.id')
+      .notNullable()
       .unsigned();
     table.integer('restaurant')
       .references('restaurant.id')
