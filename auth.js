@@ -35,11 +35,12 @@ export default express()
     try {
       const decoded = await jwt.verify(token, process.env.JWT_SECRET);
       const {exp, iat, aud, sub, ...rest} = decoded; // eslint-disable-line
-      res.json(await jwt.sign(rest, process.env.JWT_SECRET, {
+      const renewedToken = await jwt.sign(rest, process.env.JWT_SECRET, {
         subject: 'postgraphql',
         audience: 'postgraphql',
         expiresIn: 3600
-      }));
+      });
+      res.json({token: renewedToken, expiresAt: Date.now() / 1000 + 3600});
     } catch (err) {
       console.log(err);
     }
