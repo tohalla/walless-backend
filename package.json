@@ -28,9 +28,9 @@
     "eslint-plugin-better": "^0.1.5",
     "eslint-plugin-fp": "^2.2.0",
     "eslint-plugin-import": "^2.2.0",
-    "flow-bin": "^0.36.0",
+    "flow-bin": "^0.38.0",
     "knex": "^0.12.1",
-    "knex-seed-file": "^0.2.0",
+    "knex-seed-file": "^0.3.0",
     "nodemon": "^1.10.2",
     "tape": "^4.6.0"
   },
