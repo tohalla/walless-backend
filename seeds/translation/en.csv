@@ -14,11 +14,16 @@ en;restaurant.menuItems;Menu items
 en;restaurant.users;Users
 en;restaurant.settings;Settings
 en;restaurant.dashboard;Dashboard
-en;restaurant.menus.creation.create;Create menu
-en;restaurant.menus.creation.cancel;Cancel
+en;restaurant.menus.creation.create;Add new menu
 en;restaurant.menus.creation.description;Description
 en;restaurant.menus.creation.name;Name
-en;restaurant.menus.delete;Delete
-en;restaurant.menus.edit;Edit
+en;restaurant.menuItems.creation.create;Add new menu item
+en;restaurant.menuItems.creation.description;Description
+en;restaurant.menuItems.creation.name;Name
 en;settings;Settings
 en;account.invalidPassword;Invalid password
+en;submit;Submit
+en;cancel;Cancel
+en;return;Return
+en;edit;Edit
+en;delete;Delete

@@ -14,8 +14,6 @@ exports.seed = knex =>
     .then(() => knex('account').del())
     .then(() => knex('restaurant').del())
     .then(() => knex('email').del())
-    .then(() => knex('translation.translation').del())
-    .then(() => knex('translation.language').del())
     .then(() => knex('menu_item_category').del())
     .then(() => knex('menu_item_type').del())
     .then(() => seedFile(knex, path.resolve('./seeds/email.csv'), 'email', [
@@ -61,17 +59,6 @@ exports.seed = knex =>
     .then(() => seedFile(knex, path.resolve('./seeds/restaurant_email.csv'), 'restaurant_email', [
       'restaurant',
       'email'
-    ], options))
-    .then(() => seedFile(knex, path.resolve('./seeds/translation/language.csv'), 'translation.language', [
-      'locale',
-      'name',
-      'language_code',
-      'language_short_code'
-    ], options))
-    .then(() => seedFile(knex, path.resolve('./seeds/translation/en.csv'), 'translation.translation', [
-      'language',
-      'key',
-      'translation'
     ], options))
     .then(() => seedFile(knex, path.resolve('./seeds/menu_item_type.csv'), 'menu_item_type', [
       'id',
