@@ -1,26 +1,30 @@
 en;profile;profile
-en;home;Home
-en;restaurant;My restaurant
-en;contactUs;Contact us
-en;documentation;Documentation
+en;navigation.home;Home
+en;navigation.restaurant;My restaurant
+en;navigation.contactUs;Contact us
+en;navigation.documentation;Documentation
+en;navigation.settings;Settings
 en;account.email;Email
 en;account.authenticate;Log in
 en;account.password;Password
 en;account.passwordForgotten;Did you forget your password?
 en;account.authenticated;Authenticated as %{name}
 en;account.signOut;Sign out
+en;restaurant;Restaurant
+en;restaurant.description;Description
 en;restaurant.menus;Menus
 en;restaurant.menuItems;Menu items
-en;restaurant.users;Users
+en;restaurant.userManagement;User management
 en;restaurant.settings;Settings
 en;restaurant.dashboard;Dashboard
-en;restaurant.menus.creation.create;Add new menu
-en;restaurant.menus.creation.description;Description
-en;restaurant.menus.creation.name;Name
-en;restaurant.menuItems.creation.create;Add new menu item
-en;restaurant.menuItems.creation.description;Description
-en;restaurant.menuItems.creation.name;Name
-en;settings;Settings
+en;restaurant.menus.create;Add new menu
+en;restaurant.menus.description;Description
+en;restaurant.menus.name;Name
+en;restaurant.menus.manageMenuItems;Manage menu items
+en;restaurant.menuItems.create;Add new menu item
+en;restaurant.menuItems.filter;Filter items
+en;restaurant.menuItems.description;Description
+en;restaurant.menuItems.name;Name
 en;account.invalidPassword;Invalid password
 en;submit;Submit
 en;cancel;Cancel
