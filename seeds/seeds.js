@@ -8,11 +8,8 @@ const options = {
   ignoreFirstLine: false
 };
 
-exports.seed = knex =>
-  knex('restaurant_email').del()
-    .then(() => knex('account_role').del())
+exports.seed = knex => knex('account_role').del()
     .then(() => knex('account').del())
-    .then(() => knex('restaurant').del())
     .then(() => knex('email').del())
     .then(() => knex('menu_item_category').del())
     .then(() => knex('menu_item_type').del())
@@ -51,14 +48,6 @@ exports.seed = knex =>
       'allow_change_restaurant_name',
       'allow_update_restaurant_roles',
       'allow_map_roles'
-    ], options))
-    .then(() => seedFile(knex, path.resolve('./seeds/restaurant.csv'), 'restaurant', [
-      'id',
-      'name'
-    ], options))
-    .then(() => seedFile(knex, path.resolve('./seeds/restaurant_email.csv'), 'restaurant_email', [
-      'restaurant',
-      'email'
     ], options))
     .then(() => seedFile(knex, path.resolve('./seeds/menu_item_type.csv'), 'menu_item_type', [
       'id',
