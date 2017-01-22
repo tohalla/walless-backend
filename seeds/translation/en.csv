@@ -11,6 +11,7 @@ en;account.passwordForgotten;Did you forget your password?
 en;account.authenticated;Authenticated as %{name}
 en;account.signOut;Sign out
 en;restaurant;Restaurant
+en;restaurant.name;Name
 en;restaurant.description;Description
 en;restaurant.menus;Menus
 en;restaurant.menuItems;Menu items
@@ -31,3 +32,9 @@ en;cancel;Cancel
 en;return;Return
 en;edit;Edit
 en;delete;Delete
+en;enabled;Enabled
+en;enable;Enable
+en;disabled;Disabled
+en;disable;Disable
+en;location;Location
+en;address;Address
