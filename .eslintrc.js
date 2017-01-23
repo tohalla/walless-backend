@@ -13,6 +13,7 @@ module.exports = {
     'generator-star-spacing': 0,
     'fp/no-unused-expression': 0,
     'fp/no-mutating-methods': 0,
+    'fp/no-mutation': 0,
     'better/no-new': 0,
     'better/no-ifs': 0,
     'no-nested-ternary': 0,

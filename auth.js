@@ -1,4 +1,4 @@
-import express from 'express';
+import Router from 'koa-router';
 import jwt from 'jsonwebtoken';
 
 import {query} from './utilities/query';
@@ -8,9 +8,9 @@ const tokenIsValid = async (user, token) => (await query(
   [user, token]
 ))[0].validation_token_exists;
 
-export default express()
-  .post('/', async (req, res, next) => {
-    const {email, password} = req.body;
+export default new Router({prefix: 'auth'})
+  .post('/', async (ctx, next) => {
+    const {email, password} = ctx.request.fields;
     if (email && password) {
       try {
         const claim = (await query(
@@ -21,17 +21,18 @@ export default express()
           subject: 'postgraphql',
           audience: 'postgraphql'
         });
-        res.json({token, expiresAt: claim.exp});
+        ctx.body = {token, expiresAt: claim.exp};
       } catch (err) {
-        res.status(401).json(err);
+        ctx.status = 401;
+        ctx.body = err;
       }
     } else {
-      res.sendStatus(401);
+      ctx.status = 401;
     }
     return next();
   })
-  .post('/renewToken', async (req, res, next) => {
-    const {token} = req.body;
+  .post('/renewToken', async (ctx, next) => {
+    const {token} = ctx.request.fields;
     try {
       const decoded = await jwt.verify(token, process.env.JWT_SECRET);
       const {exp, iat, aud, sub, ...rest} = decoded; // eslint-disable-line
@@ -40,14 +41,14 @@ export default express()
         audience: 'postgraphql',
         expiresIn: 3600
       });
-      res.json({token: renewedToken, expiresAt: Date.now() / 1000 + 3600});
+      ctx.body = {token: renewedToken, expiresAt: Date.now() / 1000 + 3600};
     } catch (err) {
       console.log(err);
     }
     return next();
   })
-  .put('/', async (req, res, next) => {
-    const {user, token} = req.body;
+  .put('/', async (ctx, next) => {
+    const {user, token} = ctx.request.fields;
     if (token && user && user.id && user.password) {
       if (await tokenIsValid(user.id, token)) {
         await query(
@@ -58,11 +59,11 @@ export default express()
           'DELETE FROM auth.validation_token WHERE token = $1::TEXT',
           [token]
         );
-        res.sendStatus(200);
+        ctx.status = 200;
       } else {
-        res.sendStatus(401);
+        ctx.status = 401;
       }
     }
-    res.sendStatus(404);
+    ctx.status = 404;
     return next();
   });
