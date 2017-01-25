@@ -44,7 +44,7 @@ app
     ctx.response.set('Access-Control-Request-Method', 'GET, POST, PUT');
     ctx.response.set(
       'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept'
+      'Origin, X-Requested-With, Content-Type, Accept, authorization'
     );
     return next();
   })

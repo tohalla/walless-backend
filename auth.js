@@ -32,7 +32,8 @@ export default new Router({prefix: 'auth'})
     return next();
   })
   .post('/renewToken', async (ctx, next) => {
-    const {token} = ctx.request.fields;
+    const token = ctx.header.authorization ?
+      ctx.header.authorization.replace('Bearer ', '') : null;
     try {
       const decoded = await jwt.verify(token, process.env.JWT_SECRET);
       const {exp, iat, aud, sub, ...rest} = decoded; // eslint-disable-line
