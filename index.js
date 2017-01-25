@@ -1,4 +1,3 @@
-// @flow
 import postgraphql from 'postgraphql';
 import Koa from 'koa';
 import BodyParser from 'koa-better-body';

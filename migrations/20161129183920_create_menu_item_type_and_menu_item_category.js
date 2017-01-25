@@ -1,4 +1,4 @@
-/* eslint-disable import/no-commonjs, fp/no-mutation, better/explicit-return, fp/no-nil */
+/* eslint-disable import/no-commonjs */
 exports.up = knex =>
   knex.schema.createTable('menu_item_type', table => {
     table.increments(); // id

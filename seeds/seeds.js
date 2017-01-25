@@ -1,4 +1,4 @@
-/* eslint-disable import/no-commonjs, fp/no-mutation, better/explicit-return, fp/no-nil */
+/* eslint-disable import/no-commonjs */
 const path = require('path');
 
 const seedFile = require('knex-seed-file');
@@ -44,10 +44,11 @@ exports.seed = knex => knex('account_role').del()
       'allow_insert_menu_item',
       'allow_update_menu_item',
       'allow_delete_menu_item',
-      'allow_change_restaurant_description',
-      'allow_change_restaurant_name',
+      'allow_update_restaurant',
       'allow_update_restaurant_roles',
-      'allow_map_roles'
+      'allow_map_roles',
+      'allow_upload_file',
+      'allow_delete_file'
     ], options))
     .then(() => seedFile(knex, path.resolve('./seeds/menu_item_type.csv'), 'menu_item_type', [
       'id',

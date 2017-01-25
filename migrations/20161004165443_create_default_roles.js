@@ -1,4 +1,4 @@
-/* eslint-disable import/no-commonjs, fp/no-mutation, better/explicit-return, fp/no-nil */
+/* eslint-disable import/no-commonjs */
 exports.up = knex =>
   knex.raw('CREATE ROLE guest NOLOGIN')
     .then(() => knex.raw('CREATE ROLE authenticated_user NOLOGIN'))

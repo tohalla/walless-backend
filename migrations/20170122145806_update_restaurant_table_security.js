@@ -1,4 +1,4 @@
-/* eslint-disable import/no-commonjs, fp/no-mutation, better/explicit-return, fp/no-nil */
+/* eslint-disable import/no-commonjs */
 exports.up = knex => knex.raw('GRANT INSERT, DELETE, UPDATE ON restaurant TO restaurant_owner')
   .then(() => knex.raw('GRANT SELECT, USAGE ON restaurant_id_seq TO restaurant_owner'))
   .then(() => knex.raw('GRANT INSERT, UPDATE, DELETE ON restaurant_account TO restaurant_owner'))

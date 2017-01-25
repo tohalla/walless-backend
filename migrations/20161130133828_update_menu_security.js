@@ -1,4 +1,4 @@
-/* eslint-disable import/no-commonjs, fp/no-mutation, better/explicit-return, fp/no-nil */
+/* eslint-disable import/no-commonjs */
 exports.up = knex =>
   knex.raw('GRANT SELECT ON menu TO guest')
   .then(() => knex.raw('GRANT INSERT, DELETE, UPDATE ON menu TO authenticated_user'))

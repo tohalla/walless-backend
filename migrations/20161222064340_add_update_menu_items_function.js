@@ -1,4 +1,4 @@
-/* eslint-disable import/no-commonjs, fp/no-mutation, better/explicit-return, fp/no-nil */
+/* eslint-disable import/no-commonjs */
 exports.up = knex =>
   knex.raw(`
 CREATE OR REPLACE FUNCTION update_menu_items(menu INTEGER, menu_items INTEGER[]) RETURNS SETOF menu_menu_item

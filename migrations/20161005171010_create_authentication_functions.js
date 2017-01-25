@@ -1,4 +1,4 @@
-/* eslint-disable import/no-commonjs, fp/no-mutation, better/explicit-return, fp/no-nil */
+/* eslint-disable import/no-commonjs */
 exports.up = knex => knex
   .raw('CREATE TYPE auth.jwt_claim AS (role TEXT, account_id INTEGER, exp INTEGER)')
   .then(() => knex.raw(`

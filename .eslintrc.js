@@ -1,8 +1,7 @@
 module.exports = {
   parser: 'babel-eslint',
   extends: [
-    'google',
-    'cleanjs'
+    'google'
   ],
   plugins: [
     'babel'

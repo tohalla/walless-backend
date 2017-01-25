@@ -1,4 +1,4 @@
-/* eslint-disable import/no-commonjs, fp/no-mutation, better/explicit-return, fp/no-nil */
+/* eslint-disable import/no-commonjs */
 exports.up = knex => knex.raw('ALTER TABLE email ENABLE ROW LEVEL SECURITY')
   .then(() => knex.raw('GRANT SELECT ON account TO guest'))
   .then(() => knex.raw('GRANT SELECT ON restaurant_account TO guest'))
