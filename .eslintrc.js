@@ -7,17 +7,15 @@ module.exports = {
   plugins: [
     'babel'
   ],
+  env: {
+    node: true,
+    es6: true
+  },
   rules: {
     'comma-dangle': [2, 'never'],
     'arrow-parens': 0,
     'generator-star-spacing': 0,
-    'fp/no-unused-expression': 0,
-    'fp/no-mutating-methods': 0,
-    'fp/no-mutation': 0,
-    'fp/no-nil': 0,
-    'better/no-new': 0,
-    'better/no-ifs': 0,
-    'better/explicit-return': 0,
+    'no-undef': 2,
     'no-nested-ternary': 0,
     'operator-linebreak': 0,
     "babel/generator-star-spacing": 1,
