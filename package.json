@@ -40,7 +40,8 @@
     "koa-better-body": "^3.0.2",
     "koa-router": "next",
     "pg": "^6.1.0",
-    "postgraphql": "^2.5.0"
+    "postgraphql": "^2.5.0",
+    "sharp": "^0.17.1"
   },
   "engines": {
     "node": ">=6.0.0"

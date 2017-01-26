@@ -51,7 +51,8 @@ export default new Router({prefix: 'auth'})
   .put('/', async (ctx, next) => {
     const {user, token} = ctx.request.fields;
     if (token && user && user.id && user.password) {
-      if (await tokenIsValid(user.id, token)) {
+      const valid = await tokenIsValid(user.id, token);
+      if (valid) {
         await query(
           'UPDATE auth.login SET password = $1::TEXT, VALIDATED = TRUE WHERE id = $2::INTEGER AND VALIDATED = FALSE',
           [user.password, user.id]
@@ -64,7 +65,8 @@ export default new Router({prefix: 'auth'})
       } else {
         ctx.status = 401;
       }
+    } else {
+      ctx.status = 400;
     }
-    ctx.status = 404;
     return next();
   });

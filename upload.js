@@ -1,5 +1,5 @@
 import Router from 'koa-router';
-import fs from 'fs';
+import sharp from 'sharp';
 
 import jwt from 'jsonwebtoken';
 import {query} from './utilities/query';
@@ -31,22 +31,28 @@ export default new Router({prefix: '/upload'})
           if (!allowUploadFile) {
             throw Error({status: 401});
           }
-          const data = await Promise.all(ctx.request.files.reduce((prev, curr) => {
-            if (curr.path) {
-              const fileStream = fs.createReadStream(curr.path);
-              return prev.concat(new Promise((resolve, reject) => {
+          const data = await Promise.all(ctx.request.files.reduce((prev, curr) =>
+            curr.path ?
+              prev.concat(new Promise(async (resolve, reject) => {
+                const buffer = sharp(curr.path);
+                const image = await buffer
+                  .metadata((err, metadata) => buffer.resize(
+                    metadata.width < 960 ? metadata.width : 960
+                  ))
+                  .flatten()
+                  .jpeg({quality: 90});
                 ctx.s3.upload(
                   Object.assign({}, uploadParams, {
                     ContentType: curr.type,
-                    Body: fileStream,
-                    Key: `${Math.random().toString(36).substr(2, 4)}-${ctx.request.fields.restaurant}/${curr.name}}`
+                    Body: image,
+                    Key: `${Math.random().toString(36).substr(2, 4)}-${ctx.request.fields.restaurant}/${curr.name}`
                   }),
                   (err, data) => {
                     if (err) {
                       return reject(err);
                     }
                     query(`
-                        INSERT INTO file (created_by, restaurant, uri, key)
+                        INSERT INTO file (created_by, restaurant, key, uri)
                           VALUES ($1::INTEGER, $2::INTEGER, $3::TEXT, $4::TEXT)
                         RETURNING id
                       `,
@@ -57,15 +63,13 @@ export default new Router({prefix: '/upload'})
                         data.Location
                       ]
                     )
-                      .then(file => resolve(Array.isArray(file) ? file[0] : file));
+                      .then(file => resolve(Array.isArray(file) ? file[0].id : file));
                   }
                 );
-              }));
-            }
-            return prev;
-          }, []));
-          ctx.status = 201;
+              })) : prev
+          , []));
           ctx.body = data;
+          ctx.status = 201;
         } catch (err) {
           ctx.status = err.status || 400;
         }
