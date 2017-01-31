@@ -35,10 +35,9 @@ export default new Router({prefix: '/upload'})
             curr.path ?
               prev.concat(new Promise(async (resolve, reject) => {
                 const buffer = sharp(curr.path);
+                const metadata = await buffer.metadata();
                 const image = await buffer
-                  .metadata((err, metadata) => buffer.resize(
-                    metadata.width < 960 ? metadata.width : 960
-                  ))
+                  .resize(metadata.width < 640 ? metadata.width : 640)
                   .flatten()
                   .jpeg({quality: 90});
                 ctx.s3.upload(
