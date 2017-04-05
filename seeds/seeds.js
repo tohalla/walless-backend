@@ -48,7 +48,9 @@ exports.seed = knex => knex('account_role').del()
       'allow_update_restaurant_roles',
       'allow_map_roles',
       'allow_upload_file',
-      'allow_delete_file'
+      'allow_delete_file',
+      'allow_view_users',
+      'allow_view_user_roles'
     ], options))
     .then(() => seedFile(knex, path.resolve('./seeds/menu_item_type.csv'), 'menu_item_type', [
       'id',
