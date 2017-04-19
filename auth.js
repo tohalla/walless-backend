@@ -14,7 +14,7 @@ export default new Router({prefix: 'auth'})
     if (email && password) {
       try {
         const claim = (await query(
-          'SELECT * FROM auth.authenticate($1::TEXT, $2::TEXT)',
+          'SELECT * FROM auth.authenticate(LOWER($1::TEXT), $2::TEXT)',
           [email, password]
         ))[0]; // expires in 1h
         const token = await jwt.sign(claim, process.env.JWT_SECRET, {
