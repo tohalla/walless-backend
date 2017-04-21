@@ -12,6 +12,7 @@ en;account.authenticated;Authenticated as %{name}
 en;account.signOut;Sign out
 en;restaurant;Restaurant
 en;restaurant.name;Name
+en;restaurant.servingLocations;Serving locations
 en;restaurant.description;Description
 en;restaurant.menus;Menus
 en;restaurant.menuItems;Menu items
@@ -38,3 +39,6 @@ en;disabled;Disabled
 en;disable;Disable
 en;location;Location
 en;address;Address
+en;select;Select
+en;uploadImages;Upload images
+en;selectImages;Select Images
