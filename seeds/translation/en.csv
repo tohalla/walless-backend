@@ -27,6 +27,9 @@ en;restaurant.menuItems.create;Add new menu item
 en;restaurant.menuItems.filter;Filter items
 en;restaurant.menuItems.description;Description
 en;restaurant.menuItems.name;Name
+en;restaurant.servingLocations.create;Add new serving location
+en;restaurant.servingLocations.filter;Filter serving locations
+en;restaurant.servingLocations.name;Name
 en;account.invalidPassword;Invalid password
 en;submit;Submit
 en;cancel;Cancel

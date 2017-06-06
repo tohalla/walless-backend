@@ -1,19 +1,7 @@
 const {defaultSchema} = require('../db');
 
 exports.up = knex => knex.raw(`CREATE SCHEMA ${defaultSchema}`)
-  .then(() => knex.raw(`
-    ALTER FUNCTION update_menu_items(INTEGER, INTEGER[]) SET SCHEMA ${defaultSchema}
-  `))
   .then(() => knex.raw(`ALTER FUNCTION link_restaurant_owner() SET SCHEMA ${defaultSchema}`))
-  .then(() => knex.raw(`
-    ALTER FUNCTION update_menu_item_files(INTEGER, INTEGER[]) SET SCHEMA ${defaultSchema}
-  `))
-  .then(() => knex.raw(`
-    ALTER FUNCTION restaurant_account_roles_for_restaurant(restaurant) SET SCHEMA ${defaultSchema}
-  `))
-  .then(() => knex.raw(`
-    ALTER FUNCTION restaurant_files_for_restaurant(restaurant) SET SCHEMA ${defaultSchema}
-  `))
   .then(() => knex.raw(`DROP TRIGGER create_login on account`))
   .then(() => knex.raw(`ALTER TABLE account SET SCHEMA ${defaultSchema}`))
   .then(() => knex.raw(`
@@ -74,6 +62,60 @@ exports.up = knex => knex.raw(`CREATE SCHEMA ${defaultSchema}`)
   .then(() => knex.raw(`ALTER TABLE restaurant_email SET SCHEMA ${defaultSchema}`))
   .then(() => knex.raw(`ALTER TABLE restaurant_role_rights SET SCHEMA ${defaultSchema}`))
   .then(() => knex.raw(`ALTER TABLE serving_location SET SCHEMA ${defaultSchema}`))
+  .then(() => knex.raw(`
+    CREATE OR REPLACE FUNCTION restaurant_account_roles_for_restaurant(restaurant ${defaultSchema}.restaurant) RETURNS SETOF ${defaultSchema}.account_role
+    AS $$
+      SELECT * FROM ${defaultSchema}.account_role WHERE
+        COALESCE(account_role.restaurant, restaurant_account_roles_for_restaurant.restaurant.id) = restaurant_account_roles_for_restaurant.restaurant.id
+    $$ LANGUAGE SQL STABLE
+  `))
+  .then(() => knex.raw(`
+    CREATE OR REPLACE FUNCTION restaurant_files_for_restaurant(restaurant ${defaultSchema}.restaurant) RETURNS SETOF ${defaultSchema}.file
+    AS $$
+      SELECT * FROM ${defaultSchema}.file WHERE
+        COALESCE(file.restaurant, restaurant_files_for_restaurant.restaurant.id) = restaurant_files_for_restaurant.restaurant.id
+    $$ LANGUAGE SQL STABLE
+  `))
+  .then(() => knex.raw(`
+    ALTER FUNCTION restaurant_account_roles_for_restaurant(${defaultSchema}.restaurant) SET SCHEMA ${defaultSchema}
+  `))
+  .then(() => knex.raw(`
+    ALTER FUNCTION restaurant_files_for_restaurant(${defaultSchema}.restaurant) SET SCHEMA ${defaultSchema}
+  `))
+   .then(() => knex.raw(`
+    CREATE OR REPLACE FUNCTION update_menu_items(menu INTEGER, menu_items INTEGER[]) RETURNS SETOF ${defaultSchema}.menu_menu_item
+    AS $$
+      DECLARE r record;
+      BEGIN
+        DELETE FROM ${defaultSchema}.menu_menu_item WHERE menu_menu_item.menu = update_menu_items.menu;
+        INSERT INTO ${defaultSchema}.menu_menu_item (menu, menu_item) SELECT update_menu_items.menu AS menu, menu_item FROM UNNEST(update_menu_items.menu_items) AS menu_item;
+        FOR r IN SELECT * FROM ${defaultSchema}.menu_menu_item WHERE menu_menu_item.menu = update_menu_items.menu
+        LOOP
+          RETURN next r;
+        END LOOP;
+      END;
+    $$ LANGUAGE plpgsql
+  `))
+  .then(() => knex.raw(`
+    ALTER FUNCTION update_menu_items(INTEGER, INTEGER[]) SET SCHEMA ${defaultSchema}
+  `))
+  .then(() => knex.raw(`
+    CREATE OR REPLACE FUNCTION update_menu_item_files(menu_item INTEGER, files INTEGER[]) RETURNS SETOF ${defaultSchema}.menu_item_file
+    AS $$
+      DECLARE r record;
+      BEGIN
+        DELETE FROM ${defaultSchema}.menu_item_file WHERE menu_item_file.menu_item = update_menu_item_files.menu_item;
+        INSERT INTO ${defaultSchema}.menu_item_file (menu_item, file) SELECT update_menu_item_files.menu_item AS menu_item, file FROM UNNEST(update_menu_item_files.files) AS file;
+        FOR r IN SELECT * FROM ${defaultSchema}.menu_item_file WHERE menu_item_file.menu_item = update_menu_item_files.menu_item
+        LOOP
+          RETURN next r;
+        END LOOP;
+      END;
+    $$ LANGUAGE plpgsql
+  `))
+  .then(() => knex.raw(`
+    ALTER FUNCTION update_menu_item_files(INTEGER, INTEGER[]) SET SCHEMA ${defaultSchema}
+  `))
   .then(() => knex.raw(`GRANT USAGE ON SCHEMA ${defaultSchema} TO guest`));
 
 exports.down = knex => knex.raw(`DROP TRIGGER create_login on ${defaultSchema}.account`)
@@ -101,15 +143,57 @@ exports.down = knex => knex.raw(`DROP TRIGGER create_login on ${defaultSchema}.a
   .then(() => knex.raw(`
     ALTER FUNCTION ${defaultSchema}.update_menu_items(INTEGER, INTEGER[]) SET SCHEMA public
   `))
-  .then(() => knex.raw(`ALTER FUNCTION ${defaultSchema}.link_restaurant_owner() SET SCHEMA public`))
   .then(() => knex.raw(`
     ALTER FUNCTION ${defaultSchema}.update_menu_item_files(INTEGER, INTEGER[]) SET SCHEMA public
   `))
+   .then(() => knex.raw(`
+    CREATE OR REPLACE FUNCTION update_menu_items(menu INTEGER, menu_items INTEGER[]) RETURNS SETOF menu_menu_item
+    AS $$
+      DECLARE r record;
+      BEGIN
+        DELETE FROM menu_menu_item WHERE menu_menu_item.menu = update_menu_items.menu;
+        INSERT INTO menu_menu_item (menu, menu_item) SELECT update_menu_items.menu AS menu, menu_item FROM UNNEST(update_menu_items.menu_items) AS menu_item;
+        FOR r IN SELECT * FROM menu_menu_item WHERE menu_menu_item.menu = update_menu_items.menu
+        LOOP
+          RETURN next r;
+        END LOOP;
+      END;
+    $$ LANGUAGE plpgsql
+  `))
+  .then(() => knex.raw(`
+    CREATE OR REPLACE FUNCTION update_menu_item_files(menu_item INTEGER, files INTEGER[]) RETURNS SETOF menu_item_file
+    AS $$
+      DECLARE r record;
+      BEGIN
+        DELETE FROM menu_item_file WHERE menu_item_file.menu_item = update_menu_item_files.menu_item;
+        INSERT INTO menu_item_file (menu_item, file) SELECT update_menu_item_files.menu_item AS menu_item, file FROM UNNEST(update_menu_item_files.files) AS file;
+        FOR r IN SELECT * FROM menu_item_file WHERE menu_item_file.menu_item = update_menu_item_files.menu_item
+        LOOP
+          RETURN next r;
+        END LOOP;
+      END;
+    $$ LANGUAGE plpgsql
+  `))
+  .then(() => knex.raw(`ALTER FUNCTION ${defaultSchema}.link_restaurant_owner() SET SCHEMA public`))
   .then(() => knex.raw(`
     ALTER FUNCTION ${defaultSchema}.restaurant_account_roles_for_restaurant(restaurant) SET SCHEMA public
   `))
   .then(() => knex.raw(`
     ALTER FUNCTION ${defaultSchema}.restaurant_files_for_restaurant(restaurant) SET SCHEMA public
+  `))
+  .then(() => knex.raw(`
+    CREATE OR REPLACE FUNCTION restaurant_account_roles_for_restaurant(restaurant restaurant) RETURNS SETOF account_role
+    AS $$
+      SELECT * FROM account_role WHERE
+        COALESCE(account_role.restaurant, restaurant_account_roles_for_restaurant.restaurant.id) = restaurant_account_roles_for_restaurant.restaurant.id
+    $$ LANGUAGE SQL STABLE
+  `))
+  .then(() => knex.raw(`
+    CREATE OR REPLACE FUNCTION restaurant_files_for_restaurant(restaurant restaurant) RETURNS SETOF file
+    AS $$
+      SELECT * FROM file WHERE
+        COALESCE(file.restaurant, restaurant_files_for_restaurant.restaurant.id) = restaurant_files_for_restaurant.restaurant.id
+    $$ LANGUAGE SQL STABLE
   `))
   .then(() => knex.raw(`
     CREATE OR REPLACE FUNCTION auth.authenticate(email TEXT, password TEXT) RETURNS auth.jwt_claim
