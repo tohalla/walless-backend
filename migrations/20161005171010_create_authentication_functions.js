@@ -130,7 +130,7 @@ AS $$
     WHERE account.id = current_setting('jwt.claims.account_id')::INTEGER
 $$ LANGUAGE sql stable
   `))
-  .then('GRANT EXECUTE ON FUNCTION login(INTEGER, TEXT) TO guest');
+  .then('GRANT EXECUTE ON FUNCTION auth.authenticate(INTEGER, TEXT) TO guest');
 
 exports.down = knex =>
   knex.raw('DROP FUNCTION auth.authenticate(INTEGER, TEXT)')

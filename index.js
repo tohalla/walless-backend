@@ -22,7 +22,7 @@ app.context.s3 = new AWS.S3();
 app
   .use(postgraphql(
     dbConfig.pg,
-    'public',
+    dbConfig.defaultSchema,
     {
       enableCors: true, // should put api behind reverse proxy
       development: process.env.NODE_ENV === 'development',

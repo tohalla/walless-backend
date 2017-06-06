@@ -26,5 +26,6 @@ module.exports = {
   development: knex,
   staging: knex,
   production: knex,
-  pg: Object.assign({}, pool, connection)
+  pg: Object.assign({}, pool, connection),
+  defaultSchema: 'walless'
 };
