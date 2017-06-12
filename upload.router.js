@@ -1,6 +1,7 @@
 import Router from 'koa-router';
 import sharp from 'sharp';
 
+import {defaultSchema} from './db';
 import jwt from 'jsonwebtoken';
 import {query} from './utilities/query';
 
@@ -22,8 +23,8 @@ export default new Router({prefix: '/upload'})
             process.env.JWT_SECRET
           );
           const {allow_upload_file: allowUploadFile} = (await query(`
-              SELECT allow_upload_file FROM restaurant_account
-                JOIN restaurant_role_rights ON restaurant_role_rights.id = restaurant_account.role
+              SELECT allow_upload_file FROM ${defaultSchema}.restaurant_account
+                JOIN ${defaultSchema}.restaurant_role_rights ON restaurant_role_rights.id = restaurant_account.role
               WHERE restaurant_account.restaurant = $2::INTEGER AND account = $1::INTEGER
             `,
             [accountId, ctx.request.fields.restaurant]
@@ -51,7 +52,7 @@ export default new Router({prefix: '/upload'})
                       return reject(err);
                     }
                     query(`
-                        INSERT INTO file (created_by, restaurant, key, uri)
+                        INSERT INTO ${defaultSchema}.file (created_by, restaurant, key, uri)
                           VALUES ($1::INTEGER, $2::INTEGER, $3::TEXT, $4::TEXT)
                         RETURNING id
                       `,

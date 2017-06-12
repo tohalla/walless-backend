@@ -5,9 +5,9 @@ import Router from 'koa-router';
 import AWS from 'aws-sdk';
 
 import dbConfig from './db';
-import translation from './translation';
-import auth from './auth';
-import upload from './upload';
+import translation from './translation.router';
+import auth from './auth.router';
+import upload from './upload.router';
 
 const router = new Router()
   .use(auth.routes(), auth.allowedMethods())
@@ -26,6 +26,7 @@ app
     {
       enableCors: true, // should put api behind reverse proxy
       development: process.env.NODE_ENV === 'development',
+      disableQueryLog: process.env.NODE_ENV === 'production',
       graphiql: process.env.NODE_ENV === 'development',
       jwtSecret: process.env.JWT_SECRET,
       pgDefaultRole: 'guest',
