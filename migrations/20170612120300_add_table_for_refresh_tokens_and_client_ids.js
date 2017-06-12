@@ -24,7 +24,7 @@ exports.up = knex => knex.schema.withSchema('auth').createTable('client', table 
           login.id = client.account
         WHERE
           client.id = authenticate_with_refresh_token.client_id AND
-          client.refresh_token = authenticate_with_refresh_token.token
+          client.refresh_token = authenticate_with_refresh_token.refresh_token
         INTO result;
         IF result IS null THEN
           RAISE invalid_password USING MESSAGE = 'invalid refresh token';
