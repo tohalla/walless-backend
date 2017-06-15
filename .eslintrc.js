@@ -8,7 +8,13 @@ module.exports = {
   ],
   env: {
     node: true,
-    es6: true
+  },
+  "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+          "jsx": true
+      }
   },
   rules: {
     'comma-dangle': [2, 'never'],
