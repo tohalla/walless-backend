@@ -13,6 +13,13 @@ exports.seed = knex => knex('account_role').del()
     .then(() => knex('email').del())
     .then(() => knex('menu_item_category').del())
     .then(() => knex('menu_item_type').del())
+    .then(() => knex('currency').del())
+    .then(() => seedFile(knex, path.resolve('./seeds/currency.csv'), 'currency', [
+      'code',
+      'name',
+      'symbol',
+      'zero_decimal'
+    ], options))
     .then(() => seedFile(knex, path.resolve('./seeds/email.csv'), 'email', [
       'id',
       'email',

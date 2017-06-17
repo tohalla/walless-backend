@@ -3,18 +3,21 @@ module.exports = {
   extends: [
     'google'
   ],
+  globals: {
+    Promise: true
+  },
   plugins: [
     'babel'
   ],
   env: {
     node: true,
   },
-  "parserOptions": {
-      "ecmaVersion": 6,
-      "sourceType": "module",
-      "ecmaFeatures": {
-          "jsx": true
-      }
+  parserOptions: {
+    ecmaVersion: 6,
+    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true
+    }
   },
   rules: {
     'comma-dangle': [2, 'never'],

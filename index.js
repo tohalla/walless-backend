@@ -1,6 +1,5 @@
 import postgraphql from 'postgraphql';
 import Koa from 'koa';
-import BodyParser from 'koa-better-body';
 import Router from 'koa-router';
 import AWS from 'aws-sdk';
 
@@ -34,7 +33,6 @@ app
       jwtPgTypeIdentifies: 'auth.jwt_claim'
     }
   ))
-  .use(new BodyParser())
   .use((ctx, next) => {
     ctx.response.set(
       'Content-Type',

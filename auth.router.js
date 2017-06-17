@@ -1,16 +1,17 @@
 import Router from 'koa-router';
 import jwt from 'jsonwebtoken';
+import koaBody from 'koa-body';
 
 import {query} from './utilities/query';
 
-const tokenIsValid = async (user, token) => (await query(
+const tokenIsValid = async(user, token) => (await query(
   'SELECT auth.validation_token_exists($1::integer, $2::text)',
   [user, token]
 ))[0].validation_token_exists;
 
 export default new Router({prefix: 'auth'})
-  .post('/', async (ctx, next) => {
-    const {email, password} = ctx.request.fields;
+  .post('/', koaBody({multipart: true}), async(ctx, next) => {
+    const {body: {email, password}} = ctx.request;
     if (email && password) {
       try {
         const [claim] = (await query(
@@ -44,7 +45,7 @@ export default new Router({prefix: 'auth'})
     }
     return next();
   })
-  .post('/renewToken', async (ctx, next) => {
+  .post('/renewToken', async(ctx, next) => {
     const token = ctx.header.authorization ?
       ctx.header.authorization.replace('Bearer ', '') : null;
     try {
@@ -61,8 +62,8 @@ export default new Router({prefix: 'auth'})
     }
     return next();
   })
-  .put('/', async (ctx, next) => {
-    const {user, token} = ctx.request.fields;
+  .put('/', koaBody({multipart: true}), async(ctx, next) => {
+    const {body: {user, token}} = ctx.request;
     if (token && user && user.id && user.password) {
       const valid = await tokenIsValid(user.id, token);
       if (valid) {
@@ -84,7 +85,7 @@ export default new Router({prefix: 'auth'})
     return next();
   })
   // client
-  .get('/client', async (ctx, next) => {
+  .get('/client', async(ctx, next) => {
     if (ctx.header['refresh-token'] && ctx.header['client-id']) {
       const [claim] = await query(
         'SELECT * FROM auth.authenticate_with_refresh_token($1::TEXT, $2::TEXT)',
@@ -98,7 +99,7 @@ export default new Router({prefix: 'auth'})
     }
     return next();
   })
-  .post('/client', async (ctx, next) => {
+  .post('/client', async(ctx, next) => {
     if (ctx.header['client-id'] && ctx.header['device']) {
       throw Error('Header already contains clientId');
     }
@@ -109,7 +110,7 @@ export default new Router({prefix: 'auth'})
     ctx.body = {clientId};
     return next();
   })
-  .delete('/client', async (ctx, next) => {
+  .delete('/client', async(ctx, next) => {
     if (ctx.header['client-id']) {
       await query(
         'DELETE FROM auth.client WHERE id=$1::TEXT',
