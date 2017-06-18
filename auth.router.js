@@ -1,8 +1,10 @@
 import Router from 'koa-router';
 import jwt from 'jsonwebtoken';
 import koaBody from 'koa-body';
+import config from 'config';
 
 import {query} from './utilities/query';
+const jwtSecret = config.get('jwtSecret');
 
 const tokenIsValid = async(user, token) => (await query(
   'SELECT auth.validation_token_exists($1::integer, $2::text)',
@@ -18,7 +20,7 @@ export default new Router({prefix: 'auth'})
           'SELECT * FROM auth.authenticate(LOWER($1::TEXT), $2::TEXT)',
           [email, password]
         )); // expires in 1h
-        const token = await jwt.sign(claim, process.env.JWT_SECRET, {
+        const token = await jwt.sign(claim, jwtSecret, {
           subject: 'postgraphql',
           audience: 'postgraphql'
         });
@@ -49,9 +51,9 @@ export default new Router({prefix: 'auth'})
     const token = ctx.header.authorization ?
       ctx.header.authorization.replace('Bearer ', '') : null;
     try {
-      const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+      const decoded = await jwt.verify(token, jwtSecret);
       const {exp, iat, aud, sub, ...rest} = decoded; // eslint-disable-line
-      const renewedToken = await jwt.sign(rest, process.env.JWT_SECRET, {
+      const renewedToken = await jwt.sign(rest, jwtSecret, {
         subject: 'postgraphql',
         audience: 'postgraphql',
         expiresIn: 3600
@@ -91,7 +93,7 @@ export default new Router({prefix: 'auth'})
         'SELECT * FROM auth.authenticate_with_refresh_token($1::TEXT, $2::TEXT)',
         [ctx.header['client-id'], ctx.header['refresh-token']]
       );
-      const token = await jwt.sign(claim, process.env.JWT_SECRET, {
+      const token = await jwt.sign(claim, jwtSecret, {
         subject: 'postgraphql',
         audience: 'postgraphql'
       });

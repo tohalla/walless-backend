@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "NODE_ENV=development JWT_SECRET=placeholder nodemon --exec babel-node $npm_package_main",
+    "watch": "NODE_ENV=development nodemon --exec babel-node $npm_package_main",
     "migrate": "knex migrate:latest --knexfile \"db.js\"",
     "lint": "eslint ."
   },
@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.7.27",
+    "config": "^1.26.1",
     "humps": "^2.0.0",
     "immutable": "^3.8.1",
     "jsonwebtoken": "^7.1.9",
@@ -41,7 +42,8 @@
     "koa-router": "^7.2.0",
     "pg": "^6.1.0",
     "postgraphql": "3",
-    "sharp": "^0.18.0"
+    "sharp": "^0.18.0",
+    "stripe": "^4.22.0"
   },
   "engines": {
     "node": ">=6.0.0"

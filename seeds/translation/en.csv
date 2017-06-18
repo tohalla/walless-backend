@@ -12,11 +12,10 @@ en;account.authenticated;Authenticated as %{name}
 en;account.signOut;Sign out
 en;restaurant.restaurant;Restaurant
 en;restaurant.name;Name
-en;restaurant.servingLocations;Serving locations
 en;restaurant.description;Description
-en;restaurant.userManagement;User management
-en;restaurant.settings;Settings
-en;restaurant.dashboard;Dashboard
+en;restaurant.userManagement.userManagement;User management
+en;restaurant.settings.settings;Settings
+en;restaurant.dashboard.dashboard;Dashboard
 en;restaurant.menus.menus;Menus
 en;restaurant.menus.create;Add new menu
 en;restaurant.menus.description;Description
@@ -28,14 +27,24 @@ en;restaurant.menuItems.price;Price
 en;restaurant.menuItems.filter;Filter items
 en;restaurant.menuItems.description;Description
 en;restaurant.menuItems.name;Name
+en;restaurant.orders.orders;Orders
+en;restaurant.orders.accepted;Accepted
+en;restaurant.orders.declined;Declined
+en;restaurant.orders.decline;Decline order
+en;restaurant.orders.accept;Accept order
+en;restaurant.orders.paid;Order paid
+en;restaurant.orders.orderer;Customer
+en;restaurant.orders.filter;Filter orders
 en;restaurant.servingLocations.servingLocations;Serving locations
 en;restaurant.servingLocations.create;Add new serving location
 en;restaurant.servingLocations.filter;Filter serving locations
 en;restaurant.servingLocations.name;Name
 en;restaurant.cart.cart;Cart
 en;restaurant.cart.items;Items
+en;restaurant.cart.clearItems;Clear items
 en;restaurant.cart.checkout;Order items
 en;account.invalidPassword;Invalid password
+en;currency;Currency
 en;submit;Submit
 en;cancel;Cancel
 en;return;Return

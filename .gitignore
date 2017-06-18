@@ -1,3 +1,4 @@
+config
 node_modules
 
 Thumbs.db
@@ -15,6 +16,3 @@ dev.sqlite3
 *.log
 
 *.sublime-*
-
-
-awsConfig.json

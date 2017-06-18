@@ -1,10 +1,13 @@
 import Router from 'koa-router';
 import sharp from 'sharp';
 import koaBody from 'koa-body';
+import config from 'config';
 
 import {defaultSchema} from './db';
 import jwt from 'jsonwebtoken';
 import {query} from './utilities/query';
+
+const jwtSecret = config.get('jwtSecret');
 
 const uploadParams = {
   Bucket: 'walles-static'
@@ -17,7 +20,7 @@ export default new Router({prefix: '/upload'})
       try {
         const {account_id: accountId} = await jwt.verify(
           authorization.replace('Bearer ', ''),
-          process.env.JWT_SECRET
+          jwtSecret
         );
         const [{allow_upload_file: allowUploadFile}]= (await query(`
             SELECT allow_upload_file FROM ${defaultSchema}.restaurant_account
