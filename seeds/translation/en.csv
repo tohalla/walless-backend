@@ -12,6 +12,7 @@ en;account.authenticated;Authenticated as %{name}
 en;account.signOut;Sign out
 en;restaurant.restaurant;Restaurant
 en;restaurant.name;Name
+en;restaurant.images;Images
 en;restaurant.description;Description
 en;restaurant.userManagement.userManagement;User management
 en;restaurant.settings.settings;Settings
@@ -23,11 +24,13 @@ en;restaurant.menus.name;Name
 en;restaurant.menus.manageMenuItems;Manage menu items
 en;restaurant.menuItems.menuItems;Menu items
 en;restaurant.menuItems.create;Add new menu item
+en;restaurant.menuItems.images;Images
 en;restaurant.menuItems.price;Price
 en;restaurant.menuItems.filter;Filter items
 en;restaurant.menuItems.description;Description
 en;restaurant.menuItems.name;Name
 en;restaurant.orders.orders;Orders
+en;restaurant.orders.orderItem;Order
 en;restaurant.orders.accepted;Accepted
 en;restaurant.orders.declined;Declined
 en;restaurant.orders.decline;Decline order
@@ -38,9 +41,12 @@ en;restaurant.orders.filter;Filter orders
 en;restaurant.servingLocations.servingLocations;Serving locations
 en;restaurant.servingLocations.create;Add new serving location
 en;restaurant.servingLocations.filter;Filter serving locations
+en;restaurant.servingLocations.checkout;Checkout
 en;restaurant.servingLocations.name;Name
 en;restaurant.cart.cart;Cart
 en;restaurant.cart.items;Items
+en;restaurant.cart.totalPrice;Total
+en;restaurant.cart.cartIsEmpty;Cart is empty
 en;restaurant.cart.clearItems;Clear items
 en;restaurant.cart.checkout;Order items
 en;account.invalidPassword;Invalid password
@@ -56,6 +62,9 @@ en;disabled;Disabled
 en;disable;Disable
 en;location;Location
 en;address;Address
+en;close;Close
+en;ok;Ok
 en;select;Select
 en;uploadImages;Upload images
 en;selectImages;Select Images
+en;dropImages;Drop images

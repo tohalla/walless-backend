@@ -48,13 +48,13 @@ exports.up = knex =>
       ))
     `))
     .then(() => knex.raw(`
-      CREATE OR REPLACE FUNCTION ${defaultSchema}.update_restaurant_files(r INTEGER, files INTEGER[]) RETURNS SETOF ${defaultSchema}.restaurant_file
+      CREATE OR REPLACE FUNCTION ${defaultSchema}.update_restaurant_files(restaurant INTEGER, files INTEGER[]) RETURNS SETOF ${defaultSchema}.restaurant_file
       AS $$
         DECLARE r record;
         BEGIN
-          DELETE FROM ${defaultSchema}.restaurant_file WHERE restaurant_file.restaurant = r;
-          INSERT INTO ${defaultSchema}.restaurant_file (restaurant, file) SELECT r AS restaurant, file FROM UNNEST(update_restaurant_files.files) AS file;
-          FOR r IN SELECT * FROM ${defaultSchema}.restaurant_file WHERE restaurant_file.restaurant = r
+          DELETE FROM ${defaultSchema}.restaurant_file WHERE restaurant_file.restaurant = update_restaurant_files.restaurant;
+          INSERT INTO ${defaultSchema}.restaurant_file (restaurant, file) SELECT update_restaurant_files.restaurant AS restaurant, file FROM UNNEST(update_restaurant_files.files) AS file;
+          FOR r IN SELECT * FROM ${defaultSchema}.restaurant_file WHERE restaurant_file.restaurant = update_restaurant_files.restaurant
           LOOP
             RETURN next r;
           END LOOP;
