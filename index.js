@@ -9,13 +9,16 @@ import dbConfig from './db';
 import translation from './translation.router';
 import auth from './auth.router';
 import upload from './upload.router';
+import servingLocation from './servingLocation.router';
+import pool from './pool';
 
 const jwtSecret = config.get('jwtSecret');
 
 const router = new Router()
   .use(auth.routes(), auth.allowedMethods())
   .use(translation.routes(), translation.allowedMethods())
-  .use(upload.routes(), upload.allowedMethods());
+  .use(upload.routes(), upload.allowedMethods())
+  .use(servingLocation.routes(), servingLocation.allowedMethods());
 
 AWS.config.loadFromPath('./config/awsConfig.json');
 

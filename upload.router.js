@@ -5,7 +5,7 @@ import config from 'config';
 
 import {defaultSchema} from './db';
 import jwt from 'jsonwebtoken';
-import {query} from './utilities/query';
+import pool from './pool';
 
 const jwtSecret = config.get('jwtSecret');
 
@@ -17,18 +17,19 @@ export default new Router({prefix: '/upload'})
   .post('/', koaBody({multipart: true}), async(ctx, next) => {
     const {header: {authorization}, request: {body: {files, fields}}} = ctx;
     if (authorization && files && fields && fields.restaurant ) {
+      const client = await pool.connect();
       try {
         const {account_id: accountId} = await jwt.verify(
           authorization.replace('Bearer ', ''),
           jwtSecret
         );
-        const [{allow_upload_file: allowUploadFile}]= (await query(`
+        const {rows: [{allow_upload_file: allowUploadFile}]}= await client.query(`
             SELECT allow_upload_file FROM ${defaultSchema}.restaurant_account
               JOIN ${defaultSchema}.restaurant_role_rights ON restaurant_role_rights.id = restaurant_account.role
             WHERE restaurant_account.restaurant = $2::INTEGER AND account = $1::INTEGER
           `,
           [accountId, fields.restaurant]
-        ));
+        );
         if (!allowUploadFile) {
           throw Error({status: 401});
         }
@@ -51,7 +52,7 @@ export default new Router({prefix: '/upload'})
                   if (err) {
                     return reject(err);
                   }
-                  query(`
+                  client.query(`
                       INSERT INTO ${defaultSchema}.file (created_by, restaurant, key, uri)
                         VALUES ($1::INTEGER, $2::INTEGER, $3::TEXT, $4::TEXT)
                       RETURNING id
@@ -72,6 +73,8 @@ export default new Router({prefix: '/upload'})
         ctx.status = 201;
       } catch (err) {
         ctx.status = err.status || 400;
+      } finally {
+        client.release();
       }
       return next();
     }

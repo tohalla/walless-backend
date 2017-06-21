@@ -41,6 +41,7 @@
     "koa-body": "^2.1.0",
     "koa-router": "^7.2.0",
     "pg": "^6.1.0",
+    "pg-pool": "^1.8.0",
     "postgraphql": "3",
     "sharp": "^0.18.0",
     "stripe": "^4.22.0"

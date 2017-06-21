@@ -3,29 +3,25 @@ import jwt from 'jsonwebtoken';
 import koaBody from 'koa-body';
 import config from 'config';
 
-import {query} from './utilities/query';
+import pool from './pool';
 const jwtSecret = config.get('jwtSecret');
 
-const tokenIsValid = async(user, token) => (await query(
-  'SELECT auth.validation_token_exists($1::integer, $2::text)',
-  [user, token]
-))[0].validation_token_exists;
-
 export default new Router({prefix: 'auth'})
-  .post('/', koaBody({multipart: true}), async(ctx, next) => {
+  .post('/', koaBody(), async(ctx, next) => {
     const {body: {email, password}} = ctx.request;
     if (email && password) {
+      const client = await pool.connect();
       try {
-        const [claim] = (await query(
+        const {rows: [claim]} = await client.query(
           'SELECT * FROM auth.authenticate(LOWER($1::TEXT), $2::TEXT)',
           [email, password]
-        )); // expires in 1h
+        ); // expires in 1h
         const token = await jwt.sign(claim, jwtSecret, {
           subject: 'postgraphql',
           audience: 'postgraphql'
         });
         if (ctx.header['client-id']) {
-          const [{refresh_token: refreshToken}] = await query(
+          const {rows: [{refresh_token: refreshToken}]} = await client.query(
             `
               UPDATE auth.client SET
                 account=$1::INTEGER, refresh_token = gen_random_uuid()
@@ -41,11 +37,12 @@ export default new Router({prefix: 'auth'})
       } catch (err) {
         ctx.status = 401;
         ctx.body = err;
+      } finally {
+        client.release();
       }
     } else {
       ctx.status = 401;
     }
-    return next();
   })
   .post('/renewToken', async(ctx, next) => {
     const token = ctx.header.authorization ?
@@ -62,50 +59,59 @@ export default new Router({prefix: 'auth'})
     } catch (err) {
       console.log(err);
     }
-    return next();
   })
   .put('/', koaBody({multipart: true}), async(ctx, next) => {
     const {body: {user, token}} = ctx.request;
     if (token && user && user.id && user.password) {
-      const valid = await tokenIsValid(user.id, token);
-      if (valid) {
-        await query(
-          'UPDATE auth.login SET password = $1::TEXT, VALIDATED = TRUE WHERE id = $2::INTEGER AND VALIDATED = FALSE',
-          [user.password, user.id]
+      const client = await pool.connect();
+      try {
+        const {rows: [valid]} = await client.query(
+          'SELECT auth.validation_token_exists($1::integer, $2::text)',
+          [user.id, token]
         );
-        await query(
-          'DELETE FROM auth.validation_token WHERE token = $1::TEXT',
-          [token]
-        );
-        ctx.status = 200;
-      } else {
-        ctx.status = 401;
+        if (valid) {
+          await client.query(
+            'UPDATE auth.login SET password = $1::TEXT, VALIDATED = TRUE WHERE id = $2::INTEGER AND VALIDATED = FALSE',
+            [user.password, user.id]
+          );
+          await client.query(
+            'DELETE FROM auth.validation_token WHERE token = $1::TEXT',
+            [token]
+          );
+          ctx.status = 200;
+        } else {
+          ctx.status = 401;
+        }
+      } finally {
+        client.release();
       }
     } else {
       ctx.status = 400;
     }
-    return next();
   })
   // client
   .get('/client', async(ctx, next) => {
     if (ctx.header['refresh-token'] && ctx.header['client-id']) {
-      const [claim] = await query(
+      const {rows: [claim]} = await pool.query(
         'SELECT * FROM auth.authenticate_with_refresh_token($1::TEXT, $2::TEXT)',
         [ctx.header['client-id'], ctx.header['refresh-token']]
       );
-      const token = await jwt.sign(claim, jwtSecret, {
-        subject: 'postgraphql',
-        audience: 'postgraphql'
-      });
-      ctx.body = {token, expiresAt: claim.exp};
+      if (claim) {
+        const token = await jwt.sign(claim, jwtSecret, {
+          subject: 'postgraphql',
+          audience: 'postgraphql'
+        });
+        ctx.body = {token, expiresAt: claim.exp};
+      } else {
+        ctx.status = 401;
+      }
     }
-    return next();
   })
   .post('/client', async(ctx, next) => {
     if (ctx.header['client-id'] && ctx.header['device']) {
       throw Error('Header already contains clientId');
     }
-    const [{id: clientId}] = await query(
+    const {rows: [{id: clientId}]} = await pool.query(
       'INSERT INTO auth.client (device) VALUES ($1::TEXT) RETURNING id',
       [ctx.header['device']]
     );
@@ -114,13 +120,13 @@ export default new Router({prefix: 'auth'})
   })
   .delete('/client', async(ctx, next) => {
     if (ctx.header['client-id']) {
-      await query(
+      await pool.query(
         'DELETE FROM auth.client WHERE id=$1::TEXT',
         [ctx.header['client-id']]
       );
       ctx.status = 200;
-      return next();
+    } else {
+      ctx.status = 406;
+      throw Error('Header doesn\'t containain clientId');
     }
-    ctx.status = 406;
-    throw Error('Header doesn\'t containain clientId');
   });

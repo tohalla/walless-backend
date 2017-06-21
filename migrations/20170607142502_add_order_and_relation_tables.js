@@ -37,7 +37,12 @@ exports.up = knex => knex.schema.withSchema(defaultSchema).createTable('order', 
   .then(() => knex.raw(`GRANT SELECT, INSERT ON ${defaultSchema}.order_menu_item TO authenticated_user`))
   .then(() => knex.raw(`GRANT SELECT, INSERT ON ${defaultSchema}."order" TO authenticated_user`))
   .then(() => knex.raw(`GRANT SELECT, USAGE on ${defaultSchema}.order_id_seq to authenticated_user`))
+  .then(() => knex.raw(`GRANT SELECT, USAGE on ${defaultSchema}.order_menu_item_id_seq to authenticated_user`))
   .then(() => knex.raw(`ALTER TABLE ${defaultSchema}.order_menu_item ENABLE ROW LEVEL SECURITY`))
+  .then(() => knex.raw(`
+    CREATE POLICY select_order_menu_item ON ${defaultSchema}.order_menu_item
+      FOR SELECT TO authenticated_user USING (true)
+  `))
   .then(() => knex.raw(`
     CREATE POLICY insert_order_menu_item ON ${defaultSchema}.order_menu_item
       FOR INSERT TO authenticated_user
