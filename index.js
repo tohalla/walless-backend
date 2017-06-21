@@ -10,7 +10,6 @@ import translation from './translation.router';
 import auth from './auth.router';
 import upload from './upload.router';
 import servingLocation from './servingLocation.router';
-import pool from './pool';
 
 const jwtSecret = config.get('jwtSecret');
 

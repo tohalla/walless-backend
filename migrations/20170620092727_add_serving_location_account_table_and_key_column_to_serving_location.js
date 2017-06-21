@@ -14,15 +14,8 @@ exports.up = knex =>
       .onDelete('CASCADE');
     table.timestamp('created_at').notNullable().defaultTo('now()');
   })
-    .then(() => knex.raw(`GRANT SELECT, INSERT, DELETE ON ${defaultSchema}.serving_location_account TO authenticated_user`))
+    .then(() => knex.raw(`GRANT SELECT, DELETE ON ${defaultSchema}.serving_location_account TO authenticated_user`))
     .then(() => knex.raw(`ALTER TABLE ${defaultSchema}.serving_location_account ENABLE ROW LEVEL SECURITY`))
-    .then(() => knex.raw(`
-      CREATE POLICY insert_serving_location_account ON ${defaultSchema}.serving_location_account
-        FOR INSERT TO authenticated_user
-      WITH CHECK (
-        serving_location_account.account = current_setting('jwt.claims.account_id')::INTEGER
-      )
-    `))
     .then(() => knex.raw(`
       CREATE POLICY delete_serving_location_account ON ${defaultSchema}.serving_location_account
         FOR DELETE TO restaurant_employee
