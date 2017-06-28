@@ -7,7 +7,7 @@ import stripe from 'stripe';
 
 import dbConfig from './db';
 import translation from './translation.router';
-import auth from './auth.router';
+import auth from './auth/auth.router';
 import upload from './upload.router';
 import servingLocation from './servingLocation.router';
 
