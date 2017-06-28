@@ -5,7 +5,10 @@ en;navigation.contactUs;Contact us
 en;navigation.documentation;Documentation
 en;navigation.settings;Settings
 en;account.email;Email
+en;account.firstName;First name
+en;account.lastName;Last name
 en;account.authenticate;Log in
+en;account.register;Create account
 en;account.password;Password
 en;account.passwordForgotten;Did you forget your password?
 en;account.authenticated;Authenticated as %{name}
@@ -26,16 +29,23 @@ en;restaurant.menuItems.menuItems;Menu items
 en;restaurant.menuItems.create;Add new menu item
 en;restaurant.menuItems.images;Images
 en;restaurant.menuItems.price;Price
+en;restaurant.menuItems.category;Category
+en;restaurant.menuItems.type;Type
 en;restaurant.menuItems.filter;Filter items
 en;restaurant.menuItems.description;Description
 en;restaurant.menuItems.name;Name
 en;restaurant.orders.orders;Orders
-en;restaurant.orders.orderItem;Order
-en;restaurant.orders.accepted;Accepted
+en;restaurant.orders.orderItem;Order item
+en;restaurant.orders.items;Items
+en;restaurant.orders.acceptedAt;Accepted at
+en;restaurant.orders.message;Message
+en;restaurant.orders.createdAt;Order time
+en;restaurant.orders.createdBy;Orderer
 en;restaurant.orders.declined;Declined
+en;restaurant.orders.completedAt;Completed at
 en;restaurant.orders.decline;Decline order
 en;restaurant.orders.accept;Accept order
-en;restaurant.orders.paid;Order paid
+en;restaurant.orders.payTime;Order paid at
 en;restaurant.orders.orderer;Customer
 en;restaurant.orders.filter;Filter orders
 en;restaurant.servingLocations.servingLocations;Serving locations

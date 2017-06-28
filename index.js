@@ -32,6 +32,7 @@ app
     {
       enableCors: true, // should put api behind reverse proxy
       development: process.env.NODE_ENV === 'development',
+      disableDefaultMutations: true,
       disableQueryLog: process.env.NODE_ENV === 'production',
       graphiql: process.env.NODE_ENV === 'development',
       jwtSecret,
