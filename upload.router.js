@@ -14,7 +14,7 @@ const uploadParams = {
 };
 
 export default new Router({prefix: '/upload'})
-  .post('/', koaBody({multipart: true}), async(ctx, next) => {
+  .post('/image', koaBody({multipart: true}), async(ctx, next) => {
     const {header: {authorization}, request: {body: {files, fields}}} = ctx;
     if (authorization && files && fields && fields.restaurant ) {
       const client = await pool.connect();
@@ -23,14 +23,14 @@ export default new Router({prefix: '/upload'})
           authorization.replace('Bearer ', ''),
           jwtSecret
         );
-        const {rows: [{allow_upload_file: allowUploadFile}]}= await client.query(`
-            SELECT allow_upload_file FROM ${defaultSchema}.restaurant_account
+        const {rows: [{allow_upload_image: allowUploadImage}]}= await client.query(`
+            SELECT allow_upload_image FROM ${defaultSchema}.restaurant_account
               JOIN ${defaultSchema}.restaurant_role_rights ON restaurant_role_rights.id = restaurant_account.role
             WHERE restaurant_account.restaurant = $2::INTEGER AND account = $1::INTEGER
           `,
           [accountId, fields.restaurant]
         );
-        if (!allowUploadFile) {
+        if (!allowUploadImage) {
           throw Error({status: 401});
         }
         const data = await Promise.all(Object.keys(files).reduce((prev, curr) =>
@@ -38,41 +38,40 @@ export default new Router({prefix: '/upload'})
             prev.concat(new Promise(async(resolve, reject) => {
               const buffer = sharp(files[curr].path);
               const metadata = await buffer.metadata();
+              const width = metadata.width > metadata.height ?
+                Math.min(640, metadata.width) : null;
+              const height = width ? null : Math.min(640, metadata.height);
               const image = await buffer
-                .resize(metadata.width < 640 ? metadata.width : 640)
+                .resize(width, height)
                 .flatten()
                 .jpeg({quality: 90});
-              ctx.s3.upload(
+              const data = await ctx.s3.upload(
                 Object.assign({}, uploadParams, {
                   ContentType: files[curr].type,
                   Body: image,
                   Key: `${Math.random().toString(36).substr(2, 4)}-${fields.restaurant}/${files[curr].name}`
-                }),
-                (err, data) => {
-                  if (err) {
-                    return reject(err);
-                  }
-                  client.query(`
-                      INSERT INTO ${defaultSchema}.file (created_by, restaurant, key, uri)
-                        VALUES ($1::INTEGER, $2::INTEGER, $3::TEXT, $4::TEXT)
-                      RETURNING id
-                    `,
-                    [
-                      accountId,
-                      fields.restaurant,
-                      data.Key,
-                      data.Location
-                    ]
-                  )
-                    .then(file => resolve(Array.isArray(file) ? file[0].id : file));
-                }
+                })
+              ).promise();
+              const {rows: [{id: file}]} = await client.query(`
+                  INSERT INTO ${defaultSchema}.image (created_by, restaurant, key, uri)
+                    VALUES ($1::INTEGER, $2::INTEGER, $3::TEXT, $4::TEXT)
+                  RETURNING id
+                `,
+                [
+                  accountId,
+                  fields.restaurant,
+                  data.Key,
+                  data.Location
+                ]
               );
+              resolve(file);
             })) : prev
         , []));
         ctx.body = data;
         ctx.status = 201;
       } catch (err) {
         ctx.status = err.status || 400;
+        console.log(err);
       } finally {
         client.release();
       }

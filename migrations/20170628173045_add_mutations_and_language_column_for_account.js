@@ -3,6 +3,7 @@ const {defaultSchema} = require('../db');
 exports.up = knex => knex.schema.withSchema(defaultSchema).table('account', table => {
   table
     .date('date_of_birth')
+    .defaultTo('now()')
     .notNull();
   table
     .string('language', 5)

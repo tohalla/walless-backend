@@ -12,7 +12,10 @@ exports.up = knex => knex.schema.withSchema(defaultSchema).createTable('image', 
     .onDelete('CASCADE')
     .unsigned();
   table.text('uri').notNullable().unique();
-  table.text('thumbnail').notNullable();
+  table.integer('thumbnail')
+    .references('id').inTable(`${defaultSchema}.image`)
+    .onDelete('CASCADE')
+    .unsigned();
   table.string('key', 255).notNullable().unique();
 })
   .then(() => knex.schema.withSchema(defaultSchema).table('restaurant_role_rights', table => {
@@ -101,7 +104,7 @@ exports.up = knex => knex.schema.withSchema(defaultSchema).createTable('image', 
       BEGIN
         DELETE FROM ${defaultSchema}.menu_item_image WHERE menu_item_image.menu_item = update_menu_item_images.menu_item;
         INSERT INTO ${defaultSchema}.menu_item_image (menu_item, image) SELECT update_menu_item_images.menu_item AS menu_item, image FROM UNNEST(update_menu_item_images.images) AS image;
-        FOR r IN SELECT * FROM ${defaultSchema}.menu_item_file WHERE menu_item_file.menu_item = update_menu_item_files.menu_item
+        FOR r IN SELECT * FROM ${defaultSchema}.menu_item_image WHERE menu_item_image.menu_item = update_menu_item_images.menu_item
         LOOP
           RETURN next r;
         END LOOP;
@@ -138,7 +141,7 @@ exports.up = knex => knex.schema.withSchema(defaultSchema).createTable('image', 
     CREATE POLICY insert_restaurant_image ON ${defaultSchema}.restaurant_image
       FOR INSERT TO restaurant_employee
     WITH CHECK ((
-      SELECT restaurant_role_rights.allow_upload_file FROM ${defaultSchema}.restaurant_account
+      SELECT restaurant_role_rights.allow_upload_image FROM ${defaultSchema}.restaurant_account
         JOIN ${defaultSchema}.image ON image.id = restaurant_image.image
         JOIN ${defaultSchema}.restaurant_role_rights ON restaurant_role_rights.role = restaurant_account.role
       WHERE
@@ -170,10 +173,19 @@ exports.up = knex => knex.schema.withSchema(defaultSchema).createTable('image', 
       END;
     $$ LANGUAGE plpgsql
   `))
+  .then(() => knex.raw(`
+    CREATE OR REPLACE FUNCTION ${defaultSchema}.restaurant_images_for_restaurant(restaurant ${defaultSchema}.restaurant) RETURNS SETOF ${defaultSchema}.image
+    AS $$
+      SELECT * FROM ${defaultSchema}.image WHERE
+        COALESCE(image.restaurant, restaurant_images_for_restaurant.restaurant.id) = restaurant_images_for_restaurant.restaurant.id
+    $$ LANGUAGE SQL STABLE
+  `))
+  .then(() => knex.raw(`GRANT EXECUTE ON FUNCTION ${defaultSchema}.restaurant_images_for_restaurant(${defaultSchema}.restaurant) TO guest`))
   .then(() => knex.raw(`GRANT EXECUTE ON FUNCTION ${defaultSchema}.update_restaurant_images(INTEGER, INTEGER[]) TO restaurant_employee`));
 
 exports.down = knex => knex.raw(`DROP FUNCTION ${defaultSchema}.update_restaurant_images(INTEGER, INTEGER[])`)
   .then(() => knex.raw(`DROP FUNCTION ${defaultSchema}.update_menu_item_images(INTEGER, INTEGER[])`))
+  .then(() => knex.raw(`DROP FUNCTION ${defaultSchema}.restaurant_images_for_restaurant(${defaultSchema}.restaurant)`))
   .then(() => knex.schema.withSchema(defaultSchema).dropTable('menu_item_image'))
   .then(() => knex.schema.withSchema(defaultSchema).dropTable('restaurant_image'))
   .then(() => knex.schema.withSchema(defaultSchema).dropTable('image'))
