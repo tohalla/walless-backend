@@ -1,9 +1,10 @@
 en;profile;profile
 en;navigation.home;Home
-en;navigation.restaurant;My restaurant
+en;navigation.restaurant;Restaurant
 en;navigation.contactUs;Contact us
 en;navigation.documentation;Documentation
-en;navigation.settings;Settings
+en;navigation.settings.settings;Settings
+en;navigation.settings.account;Account
 en;account.email;Email
 en;account.firstName;First name
 en;account.lastName;Last name
@@ -13,7 +14,10 @@ en;account.password;Password
 en;account.passwordForgotten;Did you forget your password?
 en;account.authenticated;Authenticated as %{name}
 en;account.signOut;Sign out
+en;account.dateOfBirth;Birthday
+en;account.validationEmailSent;Validation email has been sent
 en;restaurant.restaurant;Restaurant
+en;restaurant.scanQR;Scan QR code
 en;restaurant.name;Name
 en;restaurant.images;Images
 en;restaurant.description;Description
@@ -63,7 +67,11 @@ en;account.invalidPassword;Invalid password
 en;currency;Currency
 en;submit;Submit
 en;cancel;Cancel
+en;continue;Continue
+en;confirm;Confirm
 en;return;Return
+en;language;Language
+en;edit;Edit
 en;edit;Edit
 en;delete;Delete
 en;enabled;Enabled

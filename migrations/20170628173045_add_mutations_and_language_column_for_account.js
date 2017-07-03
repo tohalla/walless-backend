@@ -2,8 +2,13 @@ const {defaultSchema} = require('../db');
 
 exports.up = knex => knex.schema.withSchema(defaultSchema).table('account', table => {
   table
+    .date('date_of_birth')
+    .notNull();
+  table
     .string('language', 5)
     .references('locale').inTable('translation.language')
+    .notNull()
+    .defaultTo('en')
     .onDelete('SET NULL')
     .index();
 })
@@ -15,6 +20,7 @@ exports.up = knex => knex.schema.withSchema(defaultSchema).table('account', tabl
         last_name = COALESCE(account.last_name, m.last_name),
         email = COALESCE(account.email, m.email),
         language = COALESCE(account.language, m.language),
+        date_of_birth = COALESCE(account.date_of_birth, m.date_of_birth),
         updated_at = now()
       WHERE
         m.id = account.id
@@ -25,4 +31,5 @@ exports.up = knex => knex.schema.withSchema(defaultSchema).table('account', tabl
 exports.down = knex => knex.raw(`DROP FUNCTION ${defaultSchema}.update_account(${defaultSchema}.account)`)
   .then(() => knex.schema.withSchema(defaultSchema).table('account', table => {
     table.dropColumn('language');
+    table.dropColumn('date_of_birth');
   }));
