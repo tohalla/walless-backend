@@ -5,12 +5,18 @@ en;navigation.contactUs;Contact us
 en;navigation.documentation;Documentation
 en;navigation.settings.settings;Settings
 en;navigation.settings.account;Account
+en;navigation.settings.notifications;Notifications
 en;account.email;Email
 en;account.firstName;First name
 en;account.lastName;Last name
 en;account.authenticate;Log in
 en;account.register;Create account
+en;account.invalidPassword;Invalid password
 en;account.password;Password
+en;account.currentPassword;Current password
+en;account.retypePassword;Retype password
+en;account.changePassword;Change password
+en;account.resetPassword;Reset password
 en;account.passwordForgotten;Did you forget your password?
 en;account.authenticated;Authenticated as %{name}
 en;account.signOut;Sign out
@@ -63,7 +69,6 @@ en;restaurant.cart.totalPrice;Total
 en;restaurant.cart.cartIsEmpty;Cart is empty
 en;restaurant.cart.clearItems;Clear items
 en;restaurant.cart.checkout;Order items
-en;account.invalidPassword;Invalid password
 en;currency;Currency
 en;submit;Submit
 en;cancel;Cancel

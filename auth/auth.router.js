@@ -47,6 +47,38 @@ export default new Router({prefix: 'auth'})
       ctx.status = 401;
     }
   })
+  .put('/password', koaBody(), async(ctx, next) => {
+    const {body: {
+      currentPassword,
+      password
+    }} = ctx.request;
+    const token = ctx.header.authorization ?
+      ctx.header.authorization.replace('Bearer ', '') : null;
+    if (token) {
+      const {account_id: accountId} = await jwt.verify(token, jwtSecret);
+      const client = await pool.connect();
+      try {
+        const {rows: [{correct_password: correctPassword}]} = await client.query(
+          `SELECT crypt($1::TEXT, login.password) = login.password AS correct_password FROM auth.login
+            WHERE login.id = $2::INTEGER`,
+          [currentPassword, accountId]
+        );
+        if (!correctPassword) {
+          throw Error('Invalid password');
+        }
+        await client.query(
+          'UPDATE auth.login SET password=$1::TEXT WHERE id = $2::INTEGER',
+          [password, accountId]
+        );
+        ctx.status = 200;
+      } catch (err) {
+        ctx.body = err;
+        ctx.status = 401;
+      } finally {
+        client.release();
+      }
+    }
+  })
   .post('/renewToken', async(ctx, next) => {
     const token = ctx.header.authorization ?
       ctx.header.authorization.replace('Bearer ', '') : null;

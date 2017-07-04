@@ -27,7 +27,9 @@ exports.up = knex => knex.schema.withSchema(defaultSchema).table('account', tabl
         m.id = account.id
       RETURNING *
     $$ LANGUAGE sql
-  `));
+  `))
+  .then(() => knex.raw(`GRANT SELECT, UPDATE ON ${defaultSchema}.account TO authenticated_user`))
+  .then(() => knex.raw(`GRANT EXECUTE ON FUNCTION ${defaultSchema}.update_account(${defaultSchema}.account) TO authenticated_user`));
 
 exports.down = knex => knex.raw(`DROP FUNCTION ${defaultSchema}.update_account(${defaultSchema}.account)`)
   .then(() => knex.schema.withSchema(defaultSchema).table('account', table => {

@@ -45,7 +45,6 @@ export default new Router({prefix: 'account'})
     } catch (err) {
       ctx.status = 401;
       ctx.body = err;
-      console.log(err);
     } finally {
       client.release();
     }
@@ -58,8 +57,7 @@ export default new Router({prefix: 'account'})
     if (token && validationToken) {
       const client = await pool.connect();
       try {
-        const decoded = await jwt.verify(token, jwtSecret);
-        const {account_id: accountId} = decoded; // eslint-disable-line
+        const {account_id: accountId} = await jwt.verify(token, jwtSecret);
         const {rows: [valid]} = await client.query(
           'SELECT auth.validation_token_exists($1::INTEGER, $2::TEXT)',
           [accountId, validationToken]
