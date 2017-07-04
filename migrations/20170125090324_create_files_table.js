@@ -70,7 +70,7 @@ exports.up = knex => knex.schema.createTable('file', table => {
       FOR INSERT TO authenticated_user
     WITH CHECK ((
       SELECT restaurant_role_rights.allow_upload_file FROM restaurant_account
-        JOIN file ON file.id = menu_item_file.file
+        JOIN file ON file.id = menu_item_file.file AND file.restaurant = restaurant_account.restaurant
         JOIN restaurant_role_rights ON restaurant_role_rights.role = restaurant_account.role
       WHERE
         restaurant_account.account = current_setting('jwt.claims.account_id')::INTEGER
@@ -81,7 +81,7 @@ exports.up = knex => knex.schema.createTable('file', table => {
       FOR DELETE TO authenticated_user
     USING ((
       SELECT restaurant_role_rights.allow_delete_file FROM restaurant_account
-        JOIN file ON file.id = menu_item_file.file
+        JOIN file ON file.id = menu_item_file.file AND file.restaurant = restaurant_account.restaurant
         JOIN restaurant_role_rights ON restaurant_role_rights.role = restaurant_account.role
       WHERE
         restaurant_account.account = current_setting('jwt.claims.account_id')::INTEGER

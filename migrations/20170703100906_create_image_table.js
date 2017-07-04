@@ -80,7 +80,7 @@ exports.up = knex => knex.schema.withSchema(defaultSchema).createTable('image', 
       FOR INSERT TO restaurant_employee
     WITH CHECK ((
       SELECT restaurant_role_rights.allow_upload_image FROM ${defaultSchema}.restaurant_account
-        JOIN ${defaultSchema}.image ON image.id = menu_item_image.image
+        JOIN ${defaultSchema}.image ON image.id = menu_item_image.image AND image.restaurant = restaurant_account.restaurant
         JOIN ${defaultSchema}.restaurant_role_rights ON restaurant_role_rights.role = restaurant_account.role
       WHERE
         restaurant_account.account = current_setting('jwt.claims.account_id')::INTEGER
@@ -91,7 +91,7 @@ exports.up = knex => knex.schema.withSchema(defaultSchema).createTable('image', 
       FOR DELETE TO restaurant_employee
     USING ((
       SELECT restaurant_role_rights.allow_delete_image FROM ${defaultSchema}.restaurant_account
-        JOIN ${defaultSchema}.image ON image.id = menu_item_image.image
+        JOIN ${defaultSchema}.image ON image.id = menu_item_image.image AND image.restaurant = restaurant_account.restaurant
         JOIN ${defaultSchema}.restaurant_role_rights ON restaurant_role_rights.role = restaurant_account.role
       WHERE
         restaurant_account.account = current_setting('jwt.claims.account_id')::INTEGER
@@ -142,7 +142,7 @@ exports.up = knex => knex.schema.withSchema(defaultSchema).createTable('image', 
       FOR INSERT TO restaurant_employee
     WITH CHECK ((
       SELECT restaurant_role_rights.allow_upload_image FROM ${defaultSchema}.restaurant_account
-        JOIN ${defaultSchema}.image ON image.id = restaurant_image.image
+        JOIN ${defaultSchema}.image ON image.id = menu_item_image.image AND image.restaurant = restaurant_account.restaurant
         JOIN ${defaultSchema}.restaurant_role_rights ON restaurant_role_rights.role = restaurant_account.role
       WHERE
         restaurant_account.account = current_setting('jwt.claims.account_id')::INTEGER
@@ -153,7 +153,7 @@ exports.up = knex => knex.schema.withSchema(defaultSchema).createTable('image', 
       FOR DELETE TO restaurant_employee
     USING ((
       SELECT restaurant_role_rights.allow_delete_image FROM ${defaultSchema}.restaurant_account
-        JOIN ${defaultSchema}.image ON image.id = restaurant_image.image
+        JOIN ${defaultSchema}.image ON image.id = menu_item_image.image AND image.restaurant = restaurant_account.restaurant
         JOIN ${defaultSchema}.restaurant_role_rights ON restaurant_role_rights.role = restaurant_account.role
       WHERE
         restaurant_account.account = current_setting('jwt.claims.account_id')::INTEGER

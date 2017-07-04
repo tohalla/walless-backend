@@ -22,6 +22,7 @@ exports.up = knex =>
       USING ((
         SELECT restaurant_role_rights.allow_view_users FROM ${defaultSchema}.restaurant_account
           JOIN ${defaultSchema}.restaurant_role_rights ON restaurant_role_rights.role = restaurant_account.role
+          JOIN ${defaultSchema}.serving_location ON serving_location_account.serving_location = serving_location.id AND serving_location.restaurant = restaurant_account.restaurant
         WHERE restaurant_account.account = current_setting('jwt.claims.account_id')::INTEGER
       ))
     `))

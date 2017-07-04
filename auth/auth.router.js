@@ -19,6 +19,9 @@ export default new Router({prefix: 'auth'})
           'SELECT * FROM auth.authenticate(LOWER($1::TEXT), $2::TEXT)',
           [email, password]
         ); // expires in 1h
+        if (!claim.account_id) {
+          new Error('invalidAuthenticationInformation');
+        }
         const token = await jwt.sign(claim, jwtSecret, {
           subject: 'postgraphql',
           audience: 'postgraphql'
@@ -64,7 +67,7 @@ export default new Router({prefix: 'auth'})
           [currentPassword, accountId]
         );
         if (!correctPassword) {
-          throw Error('Invalid password');
+          new Error('invalidPassword');
         }
         await client.query(
           'UPDATE auth.login SET password=$1::TEXT WHERE id = $2::INTEGER',

@@ -37,7 +37,7 @@ exports.down = knex => knex.raw(`CREATE POLICY select_file ON ${defaultSchema}.f
       FOR INSERT TO restaurant_employee
     WITH CHECK ((
       SELECT restaurant_role_rights.allow_upload_file FROM ${defaultSchema}.restaurant_account
-        JOIN ${defaultSchema}.file ON file.id = menu_item_file.file
+        JOIN ${defaultSchema}.file ON file.id = menu_item_file.file AND file.restaurant = restaurant_account.restaurant
         JOIN ${defaultSchema}.restaurant_role_rights ON restaurant_role_rights.role = restaurant_account.role
       WHERE
         restaurant_account.account = current_setting('jwt.claims.account_id')::INTEGER
@@ -48,7 +48,7 @@ exports.down = knex => knex.raw(`CREATE POLICY select_file ON ${defaultSchema}.f
       FOR DELETE TO restaurant_employee
     USING ((
       SELECT restaurant_role_rights.allow_delete_file FROM ${defaultSchema}.restaurant_account
-        JOIN ${defaultSchema}.file ON file.id = menu_item_file.file
+        JOIN ${defaultSchema}.file ON file.id = menu_item_file.file AND file.restaurant = restaurant_account.restaurant
         JOIN ${defaultSchema}.restaurant_role_rights ON restaurant_role_rights.role = restaurant_account.role
       WHERE
         restaurant_account.account = current_setting('jwt.claims.account_id')::INTEGER
