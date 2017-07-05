@@ -37,8 +37,10 @@ en;navigation.restaurant;Restaurant
 en;navigation.settings.account;Account
 en;navigation.settings.notifications;Notifications
 en;navigation.settings.settings;Settings
+en;notifications.orderPlaced;Your order has been placed
 en;ok;Ok
 en;profile;profile
+en;restaurant.address;Address
 en;restaurant.cart.cart;Cart
 en;restaurant.cart.cartIsEmpty;Cart is empty
 en;restaurant.cart.checkout;Order items
@@ -66,6 +68,7 @@ en;restaurant.menus.name;Name
 en;restaurant.name;Name
 en;restaurant.orders.accept;Accept order
 en;restaurant.orders.acceptedAt;Accepted at
+en;restaurant.orders.complete;Mark as completed
 en;restaurant.orders.completedAt;Completed at
 en;restaurant.orders.createdAt;Order time
 en;restaurant.orders.createdBy;Orderer
@@ -79,6 +82,7 @@ en;restaurant.orders.orderItem;Order item
 en;restaurant.orders.orders;Orders
 en;restaurant.orders.paidAt;Paid at
 en;restaurant.orders.servingLocation;Serving location
+en;restaurant.placeholder.address;Type address
 en;restaurant.restaurant;Restaurant
 en;restaurant.scanQR;Scan QR code
 en;restaurant.servingLocations.checkout;Checkout

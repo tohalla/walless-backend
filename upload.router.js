@@ -31,7 +31,7 @@ export default new Router({prefix: '/upload'})
           [accountId, fields.restaurant]
         );
         if (!allowUploadImage) {
-          throw Error({status: 401});
+          ctx.throw(401);
         }
         const data = await Promise.all(Object.keys(files).reduce((prev, curr) =>
           files[curr].path ?
@@ -71,7 +71,6 @@ export default new Router({prefix: '/upload'})
         ctx.status = 201;
       } catch (err) {
         ctx.status = err.status || 400;
-        console.log(err);
       } finally {
         client.release();
       }
