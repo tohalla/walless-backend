@@ -27,6 +27,7 @@ en;dropImages;Drop images
 en;edit;Edit
 en;enable;Enable
 en;enabled;Enabled
+en;error.downloadNotAuthorized;Downloading not allowed
 en;error.invalidAuthenticationInformation;Invalid authentication information
 en;language;Language
 en;location;Location
@@ -40,6 +41,7 @@ en;navigation.settings.settings;Settings
 en;notifications.orderPlaced;Your order has been placed
 en;ok;Ok
 en;profile;profile
+en;restaurant.action.edit;Edit
 en;restaurant.address;Address
 en;restaurant.cart.cart;Cart
 en;restaurant.cart.cartIsEmpty;Cart is empty
@@ -50,17 +52,21 @@ en;restaurant.cart.totalPrice;Total
 en;restaurant.dashboard.dashboard;Dashboard
 en;restaurant.description;Description
 en;restaurant.images;Images
+en;restaurant.menuItems.action.create;Add new menu item
+en;restaurant.menuItems.action.edit;Edit
+en;restaurant.menuItems.action.filter;Filter items
+en;restaurant.menuItems.actions;Actions
 en;restaurant.menuItems.category;Category
-en;restaurant.menuItems.create;Add new menu item
 en;restaurant.menuItems.description;Description
-en;restaurant.menuItems.filter;Filter items
 en;restaurant.menuItems.images;Images
 en;restaurant.menuItems.menuItems;Menu items
 en;restaurant.menuItems.name;Name
 en;restaurant.menuItems.price;Price
 en;restaurant.menuItems.quantity;Quantity
 en;restaurant.menuItems.type;Type
-en;restaurant.menus.create;Add new menu
+en;restaurant.menus.action.create;Add new menu
+en;restaurant.menus.action.edit;Edit
+en;restaurant.menus.actions;Actions
 en;restaurant.menus.description;Description
 en;restaurant.menus.manageMenuItems;Manage menu items
 en;restaurant.menus.menus;Menus
@@ -85,9 +91,12 @@ en;restaurant.orders.servingLocation;Serving location
 en;restaurant.placeholder.address;Type address
 en;restaurant.restaurant;Restaurant
 en;restaurant.scanQR;Scan QR code
+en;restaurant.servingLocations.action.create;Add new serving location
+en;restaurant.servingLocations.action.downloadQR;Download QR codes
+en;restaurant.servingLocations.action.edit;Edit
+en;restaurant.servingLocations.action.filter;Filter serving locations
+en;restaurant.servingLocations.actions;Actions
 en;restaurant.servingLocations.checkout;Checkout
-en;restaurant.servingLocations.create;Add new serving location
-en;restaurant.servingLocations.filter;Filter serving locations
 en;restaurant.servingLocations.name;Name
 en;restaurant.servingLocations.servingLocations;Serving locations
 en;restaurant.settings.settings;Settings

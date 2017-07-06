@@ -1,7 +1,7 @@
 import Router from 'koa-router';
 import config from 'config';
 import koaBody from 'koa-body';
-import {template} from 'lodash/fp';
+import {template, times} from 'lodash/fp';
 import qr from 'qrcode';
 import pdf from 'html-pdf';
 
@@ -25,7 +25,6 @@ const isValid = async(servingLocationId, key, client) => {
   );
   return exists;
 };
-
 export default new Router({prefix: 'serving-location'})
   .post('/', koaBody(), async(ctx, next) => {
     const {header: {authorization}, request: {body: {code}}} = ctx;
@@ -83,41 +82,65 @@ export default new Router({prefix: 'serving-location'})
     }
   })
   .get('/restaurant/:restaurant', async(ctx, next) => {
-    const {params: {restaurant}} = ctx;
+    const {params: {restaurant}, query = {servingLocations: []}} = ctx;
+    const requestedServingLocations = JSON.parse(query.servingLocations);
     const client = await pool.connect();
-      try {
-        const {rows: servingLocations} = await client.query(
-          `SELECT id, key FROM ${defaultSchema}.serving_location WHERE restaurant=$1::integer`,
-          [restaurant]
-        );
-        const codes = await Promise.all(
-          servingLocations.map(location => new Promise((resolve, reject) =>
-            qr.toString(new Buffer(JSON.stringify({
-              servingLocationId: location.id,
-              key: location.key
-            })).toString('base64'),
-            {errorCorrectionLevel: 'H', type: 'svg', scale: 3},
-          (error, string) => error ? reject(error) : resolve(string)
-          )))
-        );
-        const html = template(`
-          <% _.forEach(function(code) { %>
-            <div style="display: inline-block"><%= code %></div>
-          <% })(codes) %>
-        `)({codes});
-        const doc = await new Promise((resolve, reject) =>
-          pdf.create(html).toBuffer((err, buffer) =>
-            err ? reject(err) : resolve(buffer)
-          )
-        );
-        ctx.body = doc;
-        ctx.type = 'application/pdf';
-        ctx.response.set('Content-Disposition', 'attachment;filename="qr.pdf"');
-      } catch (error) {
-        ctx.status = error.status || 400;
-      } finally {
-        client.release();
+    const {header: {authorization}} = ctx;
+    try {
+      if (!authorization) {
+        ctx.throw(401);
+      } else if (!Array.isArray(requestedServingLocations)) {
+        ctx.throw(400);
       }
+      const {account_id: accountId} = await jwt.verify(
+        authorization.replace('Bearer ', ''),
+        jwtSecret
+      );
+      const {rows: [{allow_download_qr_codes: allowDownloadQR}]}= await client.query(`
+          SELECT allow_download_qr_codes FROM ${defaultSchema}.restaurant_account
+            JOIN ${defaultSchema}.restaurant_role_rights ON restaurant_role_rights.id = restaurant_account.role
+          WHERE restaurant_account.restaurant = $2::INTEGER AND account = $1::INTEGER
+        `,
+        [accountId, restaurant]
+      );
+      if (!allowDownloadQR) {
+        ctx.throw(401);
+      }
+      const {rows: servingLocations} = await client.query(
+        `SELECT id, key FROM ${defaultSchema}.serving_location WHERE
+          restaurant=$1::integer AND
+          id IN (${times(i => `$${2 + i}`)(requestedServingLocations.length).join(',')})
+        `,
+        [restaurant, ...requestedServingLocations]
+      );
+      const codes = await Promise.all(
+        servingLocations.map(location => new Promise((resolve, reject) =>
+          qr.toString('walless://serving-location/' + new Buffer(JSON.stringify({
+            servingLocationId: location.id,
+            key: location.key
+          })).toString('base64'),
+          {errorCorrectionLevel: 'Q', type: 'svg', scale: 3},
+        (error, string) => error ? reject(error) : resolve(string)
+        )))
+      );
+      const html = template(`
+        <% _.forEach(function(code) { %>
+          <div style="display: inline-block"><%= code %></div>
+        <% })(codes) %>
+      `)({codes});
+      const doc = await new Promise((resolve, reject) =>
+        pdf.create(html).toBuffer((err, buffer) =>
+          err ? reject(err) : resolve(buffer)
+        )
+      );
+      ctx.body = doc;
+      ctx.type = 'application/pdf';
+      ctx.response.set('Content-Disposition', 'attachment;filename="qr.pdf"');
+    } catch (error) {
+      ctx.status = error.status || 400;
+    } finally {
+      client.release();
+    }
   })
   .get('/:code', async(ctx, next) => {
     const {params: {code}} = ctx;
