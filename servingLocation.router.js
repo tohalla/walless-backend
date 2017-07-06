@@ -1,6 +1,9 @@
 import Router from 'koa-router';
 import config from 'config';
 import koaBody from 'koa-body';
+import {template} from 'lodash/fp';
+import qr from 'qrcode';
+import pdf from 'html-pdf';
 
 import {defaultSchema} from './db';
 import jwt from 'jsonwebtoken';
@@ -78,6 +81,43 @@ export default new Router({prefix: 'serving-location'})
     } else {
       ctx.status = 400;
     }
+  })
+  .get('/restaurant/:restaurant', async(ctx, next) => {
+    const {params: {restaurant}} = ctx;
+    const client = await pool.connect();
+      try {
+        const {rows: servingLocations} = await client.query(
+          `SELECT id, key FROM ${defaultSchema}.serving_location WHERE restaurant=$1::integer`,
+          [restaurant]
+        );
+        const codes = await Promise.all(
+          servingLocations.map(location => new Promise((resolve, reject) =>
+            qr.toString(new Buffer(JSON.stringify({
+              servingLocationId: location.id,
+              key: location.key
+            })).toString('base64'),
+            {errorCorrectionLevel: 'H', type: 'svg', scale: 3},
+          (error, string) => error ? reject(error) : resolve(string)
+          )))
+        );
+        const html = template(`
+          <% _.forEach(function(code) { %>
+            <div style="display: inline-block"><%= code %></div>
+          <% })(codes) %>
+        `)({codes});
+        const doc = await new Promise((resolve, reject) =>
+          pdf.create(html).toBuffer((err, buffer) =>
+            err ? reject(err) : resolve(buffer)
+          )
+        );
+        ctx.body = doc;
+        ctx.type = 'application/pdf';
+        ctx.response.set('Content-Disposition', 'attachment;filename="qr.pdf"');
+      } catch (error) {
+        ctx.status = error.status || 400;
+      } finally {
+        client.release();
+      }
   })
   .get('/:code', async(ctx, next) => {
     const {params: {code}} = ctx;
