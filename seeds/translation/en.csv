@@ -34,6 +34,9 @@ en;location;Location
 en;navigation.contactUs;Contact us
 en;navigation.documentation;Documentation
 en;navigation.home;Home
+en;navigation.orders.receipts;Receipts
+en;navigation.orders.recent;Recent orders
+en;navigation.orders;Orders
 en;navigation.restaurant;Restaurant
 en;navigation.settings.account;Account
 en;navigation.settings.notifications;Notifications
@@ -52,53 +55,53 @@ en;restaurant.cart.totalPrice;Total
 en;restaurant.dashboard.dashboard;Dashboard
 en;restaurant.description;Description
 en;restaurant.images;Images
-en;restaurant.menuItems.action.create;Add new menu item
-en;restaurant.menuItems.action.edit;Edit
-en;restaurant.menuItems.action.filter;Filter items
-en;restaurant.menuItems.actions;Actions
-en;restaurant.menuItems.category;Category
-en;restaurant.menuItems.description;Description
-en;restaurant.menuItems.images;Images
-en;restaurant.menuItems.menuItems;Menu items
-en;restaurant.menuItems.name;Name
-en;restaurant.menuItems.price;Price
-en;restaurant.menuItems.quantity;Quantity
-en;restaurant.menuItems.type;Type
-en;restaurant.menus.action.create;Add new menu
-en;restaurant.menus.action.edit;Edit
-en;restaurant.menus.actions;Actions
-en;restaurant.menus.description;Description
-en;restaurant.menus.manageMenuItems;Manage menu items
-en;restaurant.menus.menus;Menus
-en;restaurant.menus.name;Name
+en;restaurant.menu.action.create;Add new menu
+en;restaurant.menu.action.edit;Edit
+en;restaurant.menu.actions;Actions
+en;restaurant.menu.description;Description
+en;restaurant.menu.manageMenuItems;Manage menu items
+en;restaurant.menu.menus;Menus
+en;restaurant.menu.name;Name
+en;restaurant.menuItem.action.create;Add new menu item
+en;restaurant.menuItem.action.edit;Edit
+en;restaurant.menuItem.action.filter;Filter items
+en;restaurant.menuItem.actions;Actions
+en;restaurant.menuItem.category;Category
+en;restaurant.menuItem.description;Description
+en;restaurant.menuItem.images;Images
+en;restaurant.menuItem.menuItems;Menu items
+en;restaurant.menuItem.name;Name
+en;restaurant.menuItem.price;Price
+en;restaurant.menuItem.quantity;Quantity
+en;restaurant.menuItem.type;Type
 en;restaurant.name;Name
-en;restaurant.orders.accept;Accept order
-en;restaurant.orders.acceptedAt;Accepted at
-en;restaurant.orders.complete;Mark as completed
-en;restaurant.orders.completedAt;Completed at
-en;restaurant.orders.createdAt;Order time
-en;restaurant.orders.createdBy;Orderer
-en;restaurant.orders.decline;Decline order
-en;restaurant.orders.declined;Declined
-en;restaurant.orders.filter;Filter orders
-en;restaurant.orders.items;Items
-en;restaurant.orders.message;Message
-en;restaurant.orders.orderer;Customer
-en;restaurant.orders.orderItem;Order item
-en;restaurant.orders.orders;Orders
-en;restaurant.orders.paidAt;Paid at
-en;restaurant.orders.servingLocation;Serving location
+en;restaurant.order.accept;Accept order
+en;restaurant.order.acceptedAt;Accepted at
+en;restaurant.order.complete;Mark as completed
+en;restaurant.order.completedAt;Completed at
+en;restaurant.order.createdAt;Order time
+en;restaurant.order.createdBy;Orderer
+en;restaurant.order.decline;Decline order
+en;restaurant.order.declined;Declined
+en;restaurant.order.filter;Filter orders
+en;restaurant.order.items;Items
+en;restaurant.order.message;Message
+en;restaurant.order.orderer;Customer
+en;restaurant.order.orderItem;Order item
+en;restaurant.order.orders;Orders
+en;restaurant.order.paidAt;Paid at
+en;restaurant.order.servingLocation;Serving location
 en;restaurant.placeholder.address;Type address
 en;restaurant.restaurant;Restaurant
 en;restaurant.scanQR;Scan QR code
-en;restaurant.servingLocations.action.create;Add new serving location
-en;restaurant.servingLocations.action.downloadQR;Download QR codes
-en;restaurant.servingLocations.action.edit;Edit
-en;restaurant.servingLocations.action.filter;Filter serving locations
-en;restaurant.servingLocations.actions;Actions
-en;restaurant.servingLocations.checkout;Checkout
-en;restaurant.servingLocations.name;Name
-en;restaurant.servingLocations.servingLocations;Serving locations
+en;restaurant.servingLocation.action.create;Add new serving location
+en;restaurant.servingLocation.action.downloadQR;Download QR codes
+en;restaurant.servingLocation.action.edit;Edit
+en;restaurant.servingLocation.action.filter;Filter serving locations
+en;restaurant.servingLocation.actions;Actions
+en;restaurant.servingLocation.checkout;Checkout
+en;restaurant.servingLocation.name;Name
+en;restaurant.servingLocation.servingLocations;Serving locations
 en;restaurant.settings.settings;Settings
 en;restaurant.userManagement.userManagement;User management
 en;return;Return
