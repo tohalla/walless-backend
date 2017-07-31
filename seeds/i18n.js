@@ -10,13 +10,13 @@ const options = {
 
 exports.seed = knex =>
   knex('translation.translation').del()
-    .then(() => knex('translation.language').del())
-    .then(() => seedFile(knex, path.resolve('./seeds/translation/language.csv'), 'translation.language', [
-      'locale',
-      'name',
-      'language_code',
-      'language_short_code'
-    ], options))
+    // .then(() => knex('translation.language').del())
+    // .then(() => seedFile(knex, path.resolve('./seeds/translation/language.csv'), 'translation.language', [
+    //   'locale',
+    //   'name',
+    //   'language_code',
+    //   'language_short_code'
+    // ], options))
     .then(() => seedFile(knex, path.resolve('./seeds/translation/en.csv'), 'translation.translation', [
       'language',
       'key',

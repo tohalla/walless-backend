@@ -8,7 +8,7 @@ const options = {
   ignoreFirstLine: false
 };
 
-exports.seed = knex => knex('account_role').del()
+exports.seed = knex => true || knex('account_role').del()
     .then(() => knex('account').del())
     .then(() => knex('email').del())
     .then(() => knex('menu_item_category').del())
