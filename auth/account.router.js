@@ -11,7 +11,7 @@ const mail = config.get('mail');
 const jwtSecret = config.get('jwtSecret');
 
 export default new Router({prefix: 'account'})
-  .post('/', koaBody(), async(ctx, next) => {
+  .post('/', koaBody(), async (ctx, next) => {
     const {body: {
       email,
       firstName,
@@ -50,7 +50,7 @@ export default new Router({prefix: 'account'})
     }
     return next();
   })
-  .post('/validate', koaBody(), async(ctx, next) => {
+  .post('/validate', koaBody(), async (ctx, next) => {
     const {body: {validationToken}} = ctx.request;
     const token = ctx.header.authorization ?
       ctx.header.authorization.replace('Bearer ', '') : null;

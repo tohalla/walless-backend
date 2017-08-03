@@ -28,15 +28,17 @@ en;edit;Edit
 en;enable;Enable
 en;enabled;Enabled
 en;error.downloadNotAuthorized;Downloading not allowed
+en;error.emailRegisteredToAccount;Email %{email} already registered to an account
 en;error.invalidAuthenticationInformation;Invalid authentication information
 en;language;Language
 en;location;Location
 en;navigation.contactUs;Contact us
 en;navigation.documentation;Documentation
 en;navigation.home;Home
+en;navigation.orders.myOrders;My orders
+en;navigation.orders.orders;Orders
 en;navigation.orders.receipts;Receipts
 en;navigation.orders.recent;Recent orders
-en;navigation.orders.orders;Orders
 en;navigation.restaurant;Restaurant
 en;navigation.settings.account;Account
 en;navigation.settings.notifications;Notifications
@@ -91,6 +93,11 @@ en;restaurant.order.orderItem;Order item
 en;restaurant.order.orders;Orders
 en;restaurant.order.paidAt;Paid at
 en;restaurant.order.servingLocation;Serving location
+en;restaurant.order.status.accepted;Accepted
+en;restaurant.order.status.completed;Completed
+en;restaurant.order.status.declined;Declined
+en;restaurant.order.status.paid;Paid
+en;restaurant.order.status.pending;Pending
 en;restaurant.placeholder.address;Type address
 en;restaurant.restaurant;Restaurant
 en;restaurant.scanQR;Scan QR code
