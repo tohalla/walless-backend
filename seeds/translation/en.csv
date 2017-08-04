@@ -18,6 +18,7 @@ en;address;Address
 en;cancel;Cancel
 en;close;Close
 en;confirm;Confirm
+en;confirmDelete;Are you sure you want to delete %{name}? Action cannot be cancelled.
 en;continue;Continue
 en;currency;Currency
 en;delete;Delete
@@ -58,6 +59,7 @@ en;restaurant.dashboard.dashboard;Dashboard
 en;restaurant.description;Description
 en;restaurant.images;Images
 en;restaurant.menu.action.create;Add new menu
+en;restaurant.menu.action.delete;Delete
 en;restaurant.menu.action.edit;Edit
 en;restaurant.menu.actions;Actions
 en;restaurant.menu.description;Description
@@ -65,6 +67,7 @@ en;restaurant.menu.manageMenuItems;Manage menu items
 en;restaurant.menu.menus;Menus
 en;restaurant.menu.name;Name
 en;restaurant.menuItem.action.create;Add new menu item
+en;restaurant.menuItem.action.delete;Delete
 en;restaurant.menuItem.action.edit;Edit
 en;restaurant.menuItem.action.filter;Filter items
 en;restaurant.menuItem.actions;Actions
@@ -103,6 +106,7 @@ en;restaurant.placeholder.address;Type address
 en;restaurant.restaurant;Restaurant
 en;restaurant.scanQR;Scan QR code
 en;restaurant.servingLocation.action.create;Add new serving location
+en;restaurant.servingLocation.action.delete;Delete
 en;restaurant.servingLocation.action.downloadQR;Download QR codes
 en;restaurant.servingLocation.action.edit;Edit
 en;restaurant.servingLocation.action.filter;Filter serving locations
