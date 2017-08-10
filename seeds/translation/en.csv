@@ -14,6 +14,7 @@ en;account.resetPassword;Reset password
 en;account.retypePassword;Retype password
 en;account.signOut;Sign out
 en;account.validationEmailSent;Validation email has been sent
+en;add;Add
 en;address;Address
 en;cancel;Cancel
 en;close;Close
@@ -46,8 +47,10 @@ en;navigation.settings.notifications;Notifications
 en;navigation.settings.settings;Settings
 en;notifications.orderPlaced;Your order has been placed
 en;ok;Ok
+en;optional;Optional
 en;profile;profile
 en;restaurant.action.edit;Edit
+en;restaurant.action.manageSettings;Settings
 en;restaurant.address;Address
 en;restaurant.cart.cart;Cart
 en;restaurant.cart.cartIsEmpty;Cart is empty
@@ -71,10 +74,12 @@ en;restaurant.menuItem.action.delete;Delete
 en;restaurant.menuItem.action.edit;Edit
 en;restaurant.menuItem.action.filter;Filter items
 en;restaurant.menuItem.actions;Actions
+en;restaurant.menuItem.addNewIngredient;addNewIngredient
 en;restaurant.menuItem.category;Category
 en;restaurant.menuItem.description;Description
 en;restaurant.menuItem.diets;Diets
 en;restaurant.menuItem.images;Images
+en;restaurant.menuItem.ingredients;Ingredients
 en;restaurant.menuItem.menuItems;Menu items
 en;restaurant.menuItem.name;Name
 en;restaurant.menuItem.price;Price
@@ -97,11 +102,12 @@ en;restaurant.order.orderItem;Order item
 en;restaurant.order.orders;Orders
 en;restaurant.order.paidAt;Paid at
 en;restaurant.order.servingLocation;Serving location
-en;restaurant.order.status.accepted;Accepted
-en;restaurant.order.status.completed;Completed
-en;restaurant.order.status.declined;Declined
-en;restaurant.order.status.paid;Paid
-en;restaurant.order.status.pending;Pending
+en;restaurant.order.state.accepted;Accepted
+en;restaurant.order.state.completed;Completed
+en;restaurant.order.state.declined;Declined
+en;restaurant.order.state.paid;Paid
+en;restaurant.order.state.pending;Pending
+en;restaurant.order.state.state;State
 en;restaurant.placeholder.address;Type address
 en;restaurant.restaurant;Restaurant
 en;restaurant.scanQR;Scan QR code
@@ -119,5 +125,8 @@ en;restaurant.userManagement.userManagement;User management
 en;return;Return
 en;select;Select
 en;selectImages;Select Images
+en;showAll;Show all
 en;submit;Submit
+en;time.allTime;All time
+en;time.today;Today
 en;uploadImages;Upload images

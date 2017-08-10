@@ -18,11 +18,11 @@ exports.up = knex => knex.raw(`
   .then(() => knex.raw(`GRANT INSERT, DELETE ON ${defaultSchema}.menu_item_diet TO restaurant_employee`))
   .then(() => knex.raw(`ALTER TABLE ${defaultSchema}.menu_item_diet ENABLE ROW LEVEL SECURITY`))
   .then(() => knex.raw(`
-    CREATE POLICY select_restaurant_image ON ${defaultSchema}.menu_item_diet
+    CREATE POLICY select_restaurant_diet ON ${defaultSchema}.menu_item_diet
       FOR SELECT USING (true)
   `))
   .then(() => knex.raw(`
-    CREATE POLICY insert_restaurant_image ON ${defaultSchema}.menu_item_diet
+    CREATE POLICY insert_restaurant_diet ON ${defaultSchema}.menu_item_diet
       FOR INSERT TO restaurant_employee
     WITH CHECK ((
       SELECT restaurant_role_rights.allow_update_menu_item FROM ${defaultSchema}.restaurant_account
@@ -33,7 +33,7 @@ exports.up = knex => knex.raw(`
     ))
   `))
   .then(() => knex.raw(`
-    CREATE POLICY delete_restaurant_image ON ${defaultSchema}.menu_item_diet
+    CREATE POLICY delete_restaurant_diet ON ${defaultSchema}.menu_item_diet
       FOR DELETE TO restaurant_employee
     USING ((
       SELECT restaurant_role_rights.allow_update_menu_item FROM ${defaultSchema}.restaurant_account
@@ -45,8 +45,8 @@ exports.up = knex => knex.raw(`
   `));
 
 exports.down = knex => knex.raw(`DROP FUNCTION ${defaultSchema}.update_menu_item_diets(INTEGER, INTEGER[])`)
-  .then(() => knex.raw(`DROP POLICY select_restaurant_image ON ${defaultSchema}.menu_item_diet`))
-  .then(() => knex.raw(`DROP POLICY insert_restaurant_image ON ${defaultSchema}.menu_item_diet`))
-  .then(() => knex.raw(`DROP POLICY delete_restaurant_image ON ${defaultSchema}.menu_item_diet`))
+  .then(() => knex.raw(`DROP POLICY select_restaurant_diet ON ${defaultSchema}.menu_item_diet`))
+  .then(() => knex.raw(`DROP POLICY insert_restaurant_diet ON ${defaultSchema}.menu_item_diet`))
+  .then(() => knex.raw(`DROP POLICY delete_restaurant_diet ON ${defaultSchema}.menu_item_diet`))
   .then(() => knex.raw(`REVOKE INSERT, DELETE ON ${defaultSchema}.menu_item_diet FROM restaurant_employee`))
   .then(() => knex.raw(`ALTER TABLE ${defaultSchema}.menu_item_diet DISABLE ROW LEVEL SECURITY`));
