@@ -53,6 +53,9 @@
   "engines": {
     "node": ">=6.0.0"
   },
+  "nodemonConfig" : {
+    "ignore": ["schema.json"]
+  },
   "babel": {
     "plugins": [
       "transform-flow-strip-types",
