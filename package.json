@@ -25,7 +25,7 @@
     "eslint-config-google": "^0.9.1",
     "eslint-plugin-babel": "^4.0.0",
     "eslint-plugin-import": "^2.2.0",
-    "flow-bin": "^0.52.0",
+    "flow-bin": "^0.54.0",
     "knex": "^0.13.0",
     "knex-seed-file": "^0.3.0",
     "nodemon": "^1.10.2",
@@ -47,6 +47,7 @@
     "postgraphql": "3",
     "qrcode": "^0.9.0",
     "sharp": "^0.18.0",
+    "socket.io": "^2.0.3",
     "stripe": "^4.22.0"
   },
   "engines": {

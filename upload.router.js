@@ -14,7 +14,7 @@ const uploadParams = {
 };
 
 export default new Router({prefix: '/upload'})
-  .post('/image', koaBody({multipart: true}), async(ctx, next) => {
+  .post('/image', koaBody({multipart: true}), async (ctx, next) => {
     const {header: {authorization}, request: {body: {files, fields}}} = ctx;
     if (authorization && files && fields && fields.restaurant ) {
       const client = await pool.connect();
@@ -35,7 +35,7 @@ export default new Router({prefix: '/upload'})
         }
         const data = await Promise.all(Object.keys(files).reduce((prev, curr) =>
           files[curr].path ?
-            prev.concat(new Promise(async(resolve, reject) => {
+            prev.concat(new Promise(async (resolve, reject) => {
               const buffer = sharp(files[curr].path);
               const metadata = await buffer.metadata();
               const width = metadata.width > metadata.height ?

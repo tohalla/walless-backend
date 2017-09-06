@@ -4,7 +4,10 @@ import Router from 'koa-router';
 import AWS from 'aws-sdk';
 import config from 'config';
 import stripe from 'stripe';
+import path from 'path';
+import {createServer} from 'http';
 
+import notificationHandler from './notificationHandler';
 import dbConfig from './db';
 import translation from './translation.router';
 import auth from './auth/auth.router';
@@ -28,9 +31,10 @@ app.context.stripe = stripe(config.get('stripe.apiKey'));
 app
   .use(postgraphql(
     dbConfig.pg,
-    dbConfig.defaultSchema,
+    [dbConfig.defaultSchema, 'auth'],
     {
-      enableCors: true, // should put api behind reverse proxy
+      enableCors: true, // should put api behind reverse proxy,
+      exportJsonSchemaPath: path.resolve(__dirname, 'schema.json'),
       development: process.env.NODE_ENV === 'development',
       disableDefaultMutations: true,
       disableQueryLog: process.env.NODE_ENV === 'production',
@@ -38,7 +42,7 @@ app
       jwtSecret,
       pgDefaultRole: 'guest',
       watchPg: process.env.NODE_ENV === 'development',
-      jwtPgTypeIdentifies: 'auth.jwt_claim'
+      jwtPgTypeIdentifier: 'auth.jwt_claim'
     }
   ))
   .use((ctx, next) => {
@@ -55,5 +59,10 @@ app
     return next();
   })
   .use(router.routes())
-  .use(router.allowedMethods())
-  .listen(8080);
+  .use(router.allowedMethods());
+
+const server = createServer(app.callback());
+
+notificationHandler(server);
+
+server.listen(8080);

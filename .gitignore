@@ -16,3 +16,5 @@ dev.sqlite3
 *.log
 
 *.sublime-*
+
+schema.json

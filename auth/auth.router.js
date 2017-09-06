@@ -29,6 +29,10 @@ export default new Router({prefix: 'auth'})
           subject: 'postgraphql',
           audience: 'postgraphql'
         });
+        const wsToken = await jwt.sign({user: claim.account_id}, jwtSecret, {
+          subject: 'ws',
+          audience: 'ws'
+        });
         if (ctx.header['client-id']) {
           const {rows: [{refresh_token: refreshToken}]} = await client.query(
             `
@@ -39,10 +43,10 @@ export default new Router({prefix: 'auth'})
             `,
             [claim.account_id, ctx.header['client-id']]
           );
-          ctx.body = {token, expiresAt: claim.exp, refreshToken};
+          ctx.body = {token, wsToken, expiresAt: claim.exp, refreshToken};
           return next();
         }
-        ctx.body = {token, expiresAt: claim.exp};
+        ctx.body = {token, wsToken, expiresAt: claim.exp};
       } catch (err) {
         ctx.status = 401;
         ctx.body = err;
@@ -126,10 +130,17 @@ export default new Router({prefix: 'auth'})
       const {exp, iat, aud, sub, ...rest} = decoded; // eslint-disable-line
       const renewedToken = await jwt.sign(rest, jwtSecret, {
         subject: 'postgraphql',
-        audience: 'postgraphql',
-        expiresIn: 3600
+        audience: 'postgraphql'
       });
-      ctx.body = {token: renewedToken, expiresAt: Date.now() / 1000 + 3600};
+      const wsToken = await jwt.sign({user: rest.account_id}, jwtSecret, {
+        subject: 'ws',
+        audience: 'ws'
+      });
+      ctx.body = {
+        token: renewedToken,
+        wsToken,
+        expiresAt: Date.now() / 1000 + 3600
+      };
     } catch (err) {
       console.log(err);
     }

@@ -1,3 +1,4 @@
+en;view;View
 en;account.authenticate;Log in
 en;account.authenticated;Authenticated as %{name}
 en;account.changePassword;Change password
@@ -45,6 +46,7 @@ en;navigation.restaurant;Restaurant
 en;navigation.settings.account;Account
 en;navigation.settings.notifications;Notifications
 en;navigation.settings.settings;Settings
+en;notifications.orderCompleted;Order %{order} has been completed
 en;notifications.orderPlaced;Your order has been placed
 en;ok;Ok
 en;optional;Optional
@@ -97,8 +99,8 @@ en;restaurant.order.declined;Declined
 en;restaurant.order.filter;Filter orders
 en;restaurant.order.items;Items
 en;restaurant.order.message;Message
-en;restaurant.order.orderer;Customer
 en;restaurant.order.orderItem;Order item
+en;restaurant.order.orderer;Customer
 en;restaurant.order.orders;Orders
 en;restaurant.order.paidAt;Paid at
 en;restaurant.order.servingLocation;Serving location
