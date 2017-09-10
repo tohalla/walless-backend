@@ -11,7 +11,7 @@ import pool from './pool';
 
 const jwtSecret = config.get('jwtSecret');
 
-const isValid = async(servingLocationId, key, client) => {
+const isValid = async (servingLocationId, key, client) => {
   if (!servingLocationId && !key) {
     return false;
   }
@@ -26,7 +26,7 @@ const isValid = async(servingLocationId, key, client) => {
   return exists;
 };
 export default new Router({prefix: 'serving-location'})
-  .post('/', koaBody(), async(ctx, next) => {
+  .post('/', koaBody(), async (ctx, next) => {
     const {header: {authorization}, request: {body: {code}}} = ctx;
     const {account_id: accountId} = authorization ? await jwt.verify(
       authorization.replace('Bearer ', ''),
@@ -58,7 +58,7 @@ export default new Router({prefix: 'serving-location'})
       ctx.status = 400;
     }
   })
-  .delete('/', koaBody(), async(ctx, next) => {
+  .delete('/', koaBody(), async (ctx, next) => {
     const {header: {authorization}} = ctx;
     const {account_id: accountId} = authorization ? await jwt.verify(
       authorization.replace('Bearer ', ''),
@@ -81,7 +81,7 @@ export default new Router({prefix: 'serving-location'})
       ctx.status = 400;
     }
   })
-  .get('/restaurant/:restaurant', async(ctx, next) => {
+  .get('/restaurant/:restaurant', async (ctx, next) => {
     const {params: {restaurant}, query = {servingLocations: []}} = ctx;
     const requestedServingLocations = JSON.parse(query.servingLocations);
     const client = await pool.connect();
@@ -142,7 +142,7 @@ export default new Router({prefix: 'serving-location'})
       client.release();
     }
   })
-  .get('/:code', async(ctx, next) => {
+  .get('/:code', async (ctx, next) => {
     const {params: {code}} = ctx;
     const {servingLocationId, key} = JSON.parse(new Buffer(code, 'base64').toString('ascii'));
     if (servingLocationId && key) {

@@ -1,4 +1,3 @@
-en;view;View
 en;account.authenticate;Log in
 en;account.authenticated;Authenticated as %{name}
 en;account.changePassword;Change password
@@ -8,11 +7,13 @@ en;account.email;Email
 en;account.firstName;First name
 en;account.invalidPassword;Invalid password
 en;account.lastName;Last name
+en;account.name;Name
 en;account.password;Password
 en;account.passwordForgotten;Did you forget your password?
 en;account.register;Create account
 en;account.resetPassword;Reset password
 en;account.retypePassword;Retype password
+en;account.role;Role
 en;account.signOut;Sign out
 en;account.validationEmailSent;Validation email has been sent
 en;add;Add
@@ -90,17 +91,17 @@ en;restaurant.menuItem.type;Type
 en;restaurant.name;Name
 en;restaurant.order.accept;Accept order
 en;restaurant.order.acceptedAt;Accepted at
+en;restaurant.order.action.filter;Filter orders
 en;restaurant.order.complete;Mark as completed
 en;restaurant.order.completedAt;Completed at
 en;restaurant.order.createdAt;Order time
 en;restaurant.order.createdBy;Orderer
 en;restaurant.order.decline;Decline order
 en;restaurant.order.declined;Declined
-en;restaurant.order.filter;Filter orders
 en;restaurant.order.items;Items
 en;restaurant.order.message;Message
-en;restaurant.order.orderItem;Order item
 en;restaurant.order.orderer;Customer
+en;restaurant.order.orderItem;Order item
 en;restaurant.order.orders;Orders
 en;restaurant.order.paidAt;Paid at
 en;restaurant.order.servingLocation;Serving location
@@ -123,6 +124,7 @@ en;restaurant.servingLocation.checkout;Checkout
 en;restaurant.servingLocation.name;Name
 en;restaurant.servingLocation.servingLocations;Serving locations
 en;restaurant.settings.settings;Settings
+en;restaurant.userManagement.action.filter;Filter users
 en;restaurant.userManagement.userManagement;User management
 en;return;Return
 en;select;Select
@@ -132,3 +134,4 @@ en;submit;Submit
 en;time.allTime;All time
 en;time.today;Today
 en;uploadImages;Upload images
+en;view;View
