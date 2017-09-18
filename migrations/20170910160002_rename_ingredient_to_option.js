@@ -33,20 +33,21 @@ exports.up = knex => knex.raw(`DROP FUNCTION ${defaultSchema}.update_menu_item_i
         .index()
         .unsigned()
         .notNullable();
+      table.boolean('default_value').notNullable().defaultTo(false);
       table.primary(['menu_item', 'option']);
     }))
     .then(() => knex.raw(`GRANT SELECT ON ${defaultSchema}.menu_item_option TO guest`))
     .then(() => knex.raw(`GRANT SELECT ON ${defaultSchema}.option TO guest`))
     .then(() => knex.raw(`
-      CREATE OR REPLACE FUNCTION ${defaultSchema}.update_menu_item_options(options ${defaultSchema}.option[])
+      CREATE OR REPLACE FUNCTION ${defaultSchema}.update_menu_item_options(menu_item INTEGER, menu_item_options ${defaultSchema}.menu_item_option[])
         RETURNS SETOF ${defaultSchema}.menu_item_option
       AS $$
         DECLARE r record;
         BEGIN
           DELETE FROM ${defaultSchema}.menu_item_option WHERE menu_item_option.menu_item = update_menu_item_options.menu_item;
-          INSERT INTO ${defaultSchema}.menu_item_option (menu_item, option)
-            SELECT option.menu_item, option.option
-              FROM UNNEST(update_menu_item_options.options) AS option;
+          INSERT INTO ${defaultSchema}.menu_item_option (menu_item, option, default_value)
+            SELECT update_menu_item_options.menu_item, menu_item_option.option, menu_item_option.default_value
+              FROM UNNEST(update_menu_item_options.menu_item_options) AS menu_item_option;
           FOR r IN SELECT * FROM ${defaultSchema}.menu_item_option WHERE menu_item_option.menu_item = update_menu_item_options.menu_item
           LOOP
             RETURN next r;
@@ -54,7 +55,7 @@ exports.up = knex => knex.raw(`DROP FUNCTION ${defaultSchema}.update_menu_item_i
         END;
       $$ LANGUAGE plpgsql
     `))
-    .then(() => knex.raw(`GRANT EXECUTE ON FUNCTION ${defaultSchema}.update_menu_item_options(${defaultSchema}.option[]) TO restaurant_employee`))
+    .then(() => knex.raw(`GRANT EXECUTE ON FUNCTION ${defaultSchema}.update_menu_item_options(INTEGER, ${defaultSchema}.menu_item_option[]) TO restaurant_employee`))
     .then(() => knex.raw(`GRANT INSERT, DELETE ON ${defaultSchema}.menu_item_option TO restaurant_employee`))
     .then(() => knex.raw(`ALTER TABLE ${defaultSchema}.menu_item_option ENABLE ROW LEVEL SECURITY`))
     .then(() => knex.raw(`
@@ -82,9 +83,10 @@ exports.up = knex => knex.raw(`DROP FUNCTION ${defaultSchema}.update_menu_item_i
         WHERE
           restaurant_account.account = current_setting('jwt.claims.account_id')::INTEGER
       ))
-    `));
+    `))
+    .then(() => knex.raw(`GRANT SELECT ON ${defaultSchema}.option_i18n TO guest`));
 
-exports.down = knex => knex.raw(`DROP FUNCTION ${defaultSchema}.update_menu_item_options(${defaultSchema}.option[])`)
+exports.down = knex => knex.raw(`DROP FUNCTION ${defaultSchema}.update_menu_item_options(INTEGER, ${defaultSchema}.menu_item_option[])`)
   .then(() => knex.schema.withSchema(defaultSchema).dropTable('menu_item_option'))
   .then(() => knex.schema.withSchema(defaultSchema).dropTable('option_i18n'))
   .then(() => knex.schema.withSchema(defaultSchema).dropTable('option'))

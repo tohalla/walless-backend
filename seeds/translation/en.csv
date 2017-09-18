@@ -24,6 +24,7 @@ en;confirm;Confirm
 en;confirmDelete;Are you sure you want to delete %{name}? Action cannot be cancelled.
 en;continue;Continue
 en;currency;Currency
+en;defaultValue;Default value
 en;delete;Delete
 en;disable;Disable
 en;disabled;Disabled
@@ -77,18 +78,19 @@ en;restaurant.menuItem.action.delete;Delete
 en;restaurant.menuItem.action.edit;Edit
 en;restaurant.menuItem.action.filter;Filter items
 en;restaurant.menuItem.actions;Actions
-en;restaurant.menuItem.addNewIngredient;addNewIngredient
+en;restaurant.menuItem.addNewOption;Add new option
 en;restaurant.menuItem.category;Category
 en;restaurant.menuItem.description;Description
 en;restaurant.menuItem.diets;Diets
 en;restaurant.menuItem.images;Images
-en;restaurant.menuItem.ingredients;Ingredients
 en;restaurant.menuItem.menuItems;Menu items
 en;restaurant.menuItem.name;Name
+en;restaurant.menuItem.options;Options
 en;restaurant.menuItem.price;Price
 en;restaurant.menuItem.quantity;Quantity
 en;restaurant.menuItem.type;Type
 en;restaurant.name;Name
+en;restaurant.option.enabledByDefault;Enabled by default
 en;restaurant.order.accept;Accept order
 en;restaurant.order.acceptedAt;Accepted at
 en;restaurant.order.action.filter;Filter orders
