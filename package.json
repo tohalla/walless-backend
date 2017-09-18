@@ -12,7 +12,7 @@
   "author": "Touko Hallasmaa",
   "devDependencies": {
     "babel-cli": "^6.14.0",
-    "babel-eslint": "^7.0.0",
+    "babel-eslint": "^8.0.0",
     "babel-plugin-transform-async-to-generator": "^6.8.0",
     "babel-plugin-transform-class-properties": "^6.11.5",
     "babel-plugin-transform-es2015-destructuring": "^6.9.0",
@@ -37,7 +37,7 @@
     "html-pdf": "^2.1.0",
     "humps": "^2.0.0",
     "immutable": "^3.8.1",
-    "jsonwebtoken": "^7.1.9",
+    "jsonwebtoken": "^8.0.0",
     "koa": "2",
     "koa-body": "^2.1.0",
     "koa-router": "^7.2.0",
@@ -48,13 +48,15 @@
     "qrcode": "^0.9.0",
     "sharp": "^0.18.0",
     "socket.io": "^2.0.3",
-    "stripe": "^4.22.0"
+    "stripe": "^5.0.0"
   },
   "engines": {
     "node": ">=6.0.0"
   },
-  "nodemonConfig" : {
-    "ignore": ["schema.json"]
+  "nodemonConfig": {
+    "ignore": [
+      "schema.json"
+    ]
   },
   "babel": {
     "plugins": [
