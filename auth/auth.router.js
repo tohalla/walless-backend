@@ -25,7 +25,7 @@ export default new Router({prefix: 'auth'})
         if (!claim.account_id) {
           new Error('invalidAuthenticationInformation');
         }
-        const token = await jwt.sign(claim, jwtSecret, {
+        const token = await jwt.sign({...claim}, jwtSecret, {
           subject: 'postgraphql',
           audience: 'postgraphql'
         });
