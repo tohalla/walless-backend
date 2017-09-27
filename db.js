@@ -1,31 +1,20 @@
-
-/* eslint-disable */
+// import env variables if environment is set to development
 const connection = {
-  host: 'localhost',
-  database: 'mehut',
-  port: 5432,
-  user: 'postgres',
-  password: 'postgres'
-}
+  host: process.env.DB_HOST || 'localhost',
+  database: process.env.DB_NAME || 'mehut',
+  port: process.env.DB_PORT || 5432,
+  user: process.env.DB_USER || 'postgres',
+  password: process.env.DB_PASSWORD || 'postgres'
+};
 
 const pool = {
-  min: 2,
-  max: 10
-}
-
-const knex = {
-  client: 'postgresql',
-  connection,
-  pool,
-  migrations: {
-    tableName: 'migration'
-  }
+  min: 1,
+  max: 5
 };
 
 module.exports = {
-  development: knex,
-  staging: knex,
-  production: knex,
   pg: Object.assign({}, pool, connection),
-  defaultSchema: 'walless'
+  defaultSchema: process.env.DB_DEFAULT_SCHEMA || 'walless',
+  cdn: 'https://d3npmgtbh268jq.cloudfront.net'
 };
+

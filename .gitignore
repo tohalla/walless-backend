@@ -1,12 +1,11 @@
 config
 node_modules
+dist
 
 Thumbs.db
 
 .DS_Store
 .svn
-
-dev.sqlite3
 
 ._*
 
@@ -18,3 +17,5 @@ dev.sqlite3
 *.sublime-*
 
 schema.json
+
+.tern-port
