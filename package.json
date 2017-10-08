@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "",
   "main": "lib/index.js",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "NODE_ENV=development nodemon --exec babel-node $npm_package_main",
@@ -27,7 +28,7 @@
     "eslint-config-google": "^0.9.1",
     "eslint-plugin-babel": "^4.0.0",
     "eslint-plugin-import": "^2.2.0",
-    "flow-bin": "^0.54.0",
+    "flow-bin": "^0.56.0",
     "nodemon": "^1.10.2",
     "tape": "^4.6.0"
   },
@@ -44,7 +45,6 @@
     "nodemailer": "^4.0.1",
     "pg": "^7.0.0",
     "pg-pool": "^2.0.0",
-    "pm2": "^2.7.1",
     "postgraphql": "3",
     "qrcode": "^0.9.0",
     "sharp": "^0.18.0",
