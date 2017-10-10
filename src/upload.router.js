@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken';
 import pool from './pool';
 
 const uploadParams = {
-  Bucket: 'walless-assets',
+  Bucket: 'walless-uploads',
   ACL: 'public-read'
 };
 
@@ -67,6 +67,7 @@ export default new Router({prefix: '/upload'})
         ctx.body = data;
         ctx.status = 201;
       } catch (err) {
+        console.log(err);
         ctx.status = err.status || 400;
       } finally {
         client.release();

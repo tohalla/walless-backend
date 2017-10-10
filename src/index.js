@@ -1,3 +1,5 @@
+if (process.env.NODE_ENV === 'development') process.env.JWT_SECRET = 'd';
+
 import postgraphql from 'postgraphql';
 import Koa from 'koa';
 import Router from 'koa-router';
@@ -19,10 +21,18 @@ const router = new Router()
   .use(upload.routes(), upload.allowedMethods())
   .use(servingLocation.routes(), servingLocation.allowedMethods());
 
-// AWS.config.loadFromPath('./config/awsConfig.json');
 
 const app = new Koa();
-// app.context.s3 = new AWS.S3();
+
+app.context.s3 = new AWS.S3({
+  region: 'nyc3',
+  accessKeyId: '4FK6DU2ZL4KDZUSH2FVM',
+  secretAccessKey: 'pnF+wi82m4ecW2K0xv0J79X3VS5aO1CTz5VnoNjsdr4',
+  endpoint: {
+    hostname: 'nyc3.digitaloceanspaces.com'
+  }
+});
+
 app.context.stripe = stripe({});
 
 app
@@ -36,7 +46,7 @@ app
       disableDefaultMutations: true,
       disableQueryLog: process.env.NODE_ENV === 'production',
       graphiql: process.env.NODE_ENV === 'development',
-      jwtSecret: process.env.JWT_SECRET || '',
+      jwtSecret: process.env.JWT_SECRET,
       pgDefaultRole: 'guest',
       watchPg: process.env.NODE_ENV === 'development',
       jwtPgTypeIdentifier: 'auth.jwt_claim'

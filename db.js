@@ -3,7 +3,7 @@ const connection = {
   host: process.env.DB_HOST || 'localhost',
   database: process.env.DB_NAME || 'mehut',
   port: process.env.DB_PORT || 5432,
-  user: process.env.DB_USER || 'walless',
+  user: process.env.DB_USER || 'postgres',
   password: process.env.DB_PASSWORD || 'postgres'
 };
 
@@ -15,6 +15,6 @@ const pool = {
 module.exports = {
   pg: Object.assign({}, pool, connection),
   defaultSchema: process.env.DB_DEFAULT_SCHEMA || 'walless',
-  cdn: 'https://d3npmgtbh268jq.cloudfront.net'
+  cdn: 'https://walless-uploads.nyc3.digitaloceanspaces.com'
 };
 
