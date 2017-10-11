@@ -6,6 +6,7 @@ import Router from 'koa-router';
 import AWS from 'aws-sdk';
 import stripe from 'stripe';
 import path from 'path';
+import helmet from 'koa-helmet';
 import {createServer} from 'http';
 
 import notificationHandler from './notificationHandler';
@@ -35,6 +36,7 @@ app.context.s3 = new AWS.S3({
 app.context.stripe = stripe({});
 
 app
+  .use(helmet())
   .use(postgraphql(
     dbConfig.pg,
     [dbConfig.defaultSchema, 'auth'],
