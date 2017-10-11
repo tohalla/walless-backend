@@ -21,7 +21,6 @@ const router = new Router()
   .use(upload.routes(), upload.allowedMethods())
   .use(servingLocation.routes(), servingLocation.allowedMethods());
 
-
 const app = new Koa();
 
 app.context.s3 = new AWS.S3({

@@ -42,7 +42,11 @@ export default new Router({prefix: 'auth'})
           ctx.body = {token, wsToken, expiresAt: claim.exp, refreshToken};
           return next();
         }
-        ctx.body = {token, wsToken, expiresAt: claim.exp};
+        const cookieConf = {httpOnly: false, overwrite: true};
+        ctx.cookies.set('Authorization', token, cookieConf);
+        ctx.cookies.set('ws-token', wsToken, cookieConf);
+        ctx.cookies.set('Expiration', claim.exp, cookieConf);
+        ctx.redirect(ctx.headers.referer);
       } catch (err) {
         ctx.status = 401;
         ctx.body = err;
