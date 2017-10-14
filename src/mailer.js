@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 
 export default nodemailer.createTransport({
-  host: 'localhost',
-  port: 465,
-  secure: true
+  sendmail: true,
+  path: '/usr/sbin/sendmail',
+  newline: 'unix'
 });

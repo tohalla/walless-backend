@@ -3,7 +3,7 @@ module.exports = {
     {
       name: 'walless-backend',
       script: './dist/index.js',
-      watch: true,
+      watch: false,
       ignore_watch: ['schema.json'],
       instance_var: 'INSTANCE_ID',
       env: {

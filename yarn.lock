@@ -2743,8 +2743,8 @@ node-pre-gyp@^0.6.36:
     tar-pack "^3.4.0"
 
 nodemailer@^4.0.1:
-  version "4.1.3"
-  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-4.1.3.tgz#4125a6ef79ecfb68357a65c34e4810f210ae120c"
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-4.2.0.tgz#310781d30130bc5b7bf756bb626ec27564c5079b"
 
 nodemon@^1.10.2:
   version "1.12.1"
