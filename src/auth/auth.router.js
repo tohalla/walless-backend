@@ -2,11 +2,11 @@ import Router from 'koa-router';
 import jwt from 'jsonwebtoken';
 import koaBody from 'koa-body';
 
-import mailer from '../mailer';
-import pool from '../pool';
-import {defaultSchema} from '../../db';
-import client from './client.router.js';
-import account from './account.router.js';
+import mailer from 'mailer';
+import pool from 'pool';
+import {defaultSchema} from 'db';
+import client from 'auth/client.router.js';
+import account from 'auth/account.router.js';
 
 export default new Router({prefix: 'auth'})
   .post('/', koaBody(), async (ctx, next) => {
@@ -42,7 +42,12 @@ export default new Router({prefix: 'auth'})
           ctx.body = {token, wsToken, expiresAt: claim.exp, refreshToken};
           return next();
         }
-        const cookieConf = {httpOnly: false, overwrite: true};
+        const cookieConf = {
+          httpOnly: false,
+          overwrite: true,
+          domain: process.env.NODE_ENV === 'production' ?
+            '.walless.fi' : 'localhost'
+        };
         ctx.cookies.set('Authorization', token, cookieConf);
         ctx.cookies.set('ws-token', wsToken, cookieConf);
         ctx.cookies.set('Expiration', claim.exp, cookieConf);
@@ -142,7 +147,6 @@ export default new Router({prefix: 'auth'})
         expiresAt: Date.now() / 1000 + 3600
       };
     } catch (err) {
-      console.log(err);
     }
   })
   .use(client.routes(), client.allowedMethods())

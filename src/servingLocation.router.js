@@ -3,10 +3,10 @@ import koaBody from 'koa-body';
 import {template, times} from 'lodash/fp';
 import qr from 'qrcode';
 import pdf from 'html-pdf';
-
-import {defaultSchema} from '../db';
 import jwt from 'jsonwebtoken';
-import pool from './pool';
+
+import {defaultSchema} from 'db';
+import pool from 'pool';
 
 const isValid = async (servingLocationId, key, client) => {
   if (!servingLocationId && !key) {

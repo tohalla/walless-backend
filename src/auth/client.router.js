@@ -1,7 +1,7 @@
 import Router from 'koa-router';
 import jwt from 'jsonwebtoken';
 
-import pool from '../pool';
+import pool from 'pool';
 
 export default new Router({prefix: 'client'})
   .get('/', async (ctx, next) => {

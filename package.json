@@ -16,6 +16,8 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.0.1",
+    "babel-plugin-inline-import": "^2.0.6",
+    "babel-plugin-module-resolver": "^2.7.1",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-es2015-destructuring": "^6.23.0",
@@ -48,6 +50,7 @@
     "postgraphql": "3",
     "qrcode": "^0.9.0",
     "sharp": "^0.18.0",
+    "showdown": "^1.7.6",
     "socket.io": "^2.0.3",
     "stripe": "^5.0.0"
   },
@@ -68,7 +71,26 @@
       "transform-async-to-generator",
       "transform-es2015-destructuring",
       "transform-es2015-shorthand-properties",
-      "transform-object-rest-spread"
+      "transform-object-rest-spread",
+      [
+        "module-resolver",
+        {
+          "root": [
+            "./src",
+            "./emails"
+          ]
+        }
+      ],
+      [
+        "babel-plugin-inline-import",
+        {
+          "extensions": [
+            ".raw",
+            ".txt",
+            ".md"
+          ]
+        }
+      ]
     ]
   }
 }

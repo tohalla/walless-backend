@@ -2,8 +2,8 @@ import Io from 'socket.io';
 import jwt from 'jsonwebtoken';
 import {get} from 'lodash/fp';
 
-import {defaultSchema} from '../db';
-import pool from './pool';
+import {defaultSchema} from 'db';
+import pool from 'pool';
 
 export default async (server) => {
   const client = await pool.connect();

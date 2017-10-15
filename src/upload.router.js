@@ -1,10 +1,10 @@
 import Router from 'koa-router';
 import sharp from 'sharp';
 import koaBody from 'koa-body';
-
-import {defaultSchema} from '../db';
 import jwt from 'jsonwebtoken';
-import pool from './pool';
+
+import {defaultSchema} from 'db';
+import pool from 'pool';
 
 const uploadParams = {
   Bucket: 'walless-uploads',
@@ -14,7 +14,7 @@ const uploadParams = {
 export default new Router({prefix: '/upload'})
   .post('/image', koaBody({multipart: true}), async (ctx, next) => {
     const {header: {authorization}, request: {body: {files, fields}}} = ctx;
-    if (authorization && files && fields && fields.restaurant ) {
+    if (authorization && files && fields && fields.restaurant) {
       const client = await pool.connect();
       try {
         const {account_id: accountId} = await jwt.verify(

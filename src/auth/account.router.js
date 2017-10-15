@@ -1,10 +1,9 @@
 import Router from 'koa-router';
 import koaBody from 'koa-body';
-import jwt from 'jsonwebtoken';
 
-import {defaultSchema} from '../../db';
-import pool from '../pool';
-import mailer from '../mailer';
+import {defaultSchema} from 'db';
+import pool from 'pool';
+import {sendValidation} from 'mailer';
 
 export default new Router({prefix: 'account'})
   .post('/', koaBody(), async (ctx, next) => {
@@ -31,12 +30,13 @@ export default new Router({prefix: 'account'})
         'SELECT token FROM auth.validation_token WHERE account = $1::INTEGER',
         [accountId]
       );
-      await mailer.sendMail({
-        from: `"Walless" <walless@walless.fi>`,
-        to: email,
-        subject: 'Walless account validation',
-        text: validationToken
-      });
+      await sendValidation(
+        email,
+        {
+          firstName,
+          validation: `https://walless.fi/validate?accountId=${accountId}&token=${validationToken}`
+        }
+      );
       ctx.status = 201;
     } catch (err) {
       ctx.status = 401;
@@ -46,17 +46,14 @@ export default new Router({prefix: 'account'})
     }
     return next();
   })
-  .post('/validate', koaBody(), async (ctx, next) => {
-    const {body: {validationToken}} = ctx.request;
-    const token = ctx.header.authorization ?
-      ctx.header.authorization.replace('Bearer ', '') : null;
-    if (token && validationToken) {
+  .get('/validate', koaBody(), async (ctx, next) => {
+    const {query: {token, accountId}} = ctx.request;
+    if (token) {
       const client = await pool.connect();
       try {
-        const {account_id: accountId} = await jwt.verify(token, process.env.JWT_SECRET);
         const {rows: [valid]} = await client.query(
           'SELECT auth.validation_token_exists($1::INTEGER, $2::TEXT)',
-          [accountId, validationToken]
+          [accountId, token]
         );
         if (valid) {
           await client.query(
@@ -64,7 +61,7 @@ export default new Router({prefix: 'account'})
             [accountId]
           );
           await client.query(
-            'DELETE FROM auth.validation_token WHERE id = $1::INTEGER',
+            'DELETE FROM auth.validation_token WHERE account = $1::INTEGER',
             [accountId]
           );
           ctx.status = 202;

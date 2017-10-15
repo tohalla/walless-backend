@@ -9,11 +9,11 @@ import path from 'path';
 import helmet from 'koa-helmet';
 import {createServer} from 'http';
 
-import notificationHandler from './notificationHandler';
-import dbConfig from '../db';
-import translation from './translation.router';
-import auth from './auth/auth.router';
-import upload from './upload.router';
+import notificationHandler from 'notificationHandler';
+import dbConfig from 'db';
+import translation from 'translation.router';
+import auth from 'auth/auth.router';
+import upload from 'upload.router';
 import servingLocation from './servingLocation.router';
 
 const router = new Router()
@@ -57,12 +57,6 @@ app
     ctx.response.set(
       'Content-Type',
       typeof ctx.body === 'object' ? 'application/json; utf-8' : 'text/plain'
-    );
-    ctx.response.set('Access-Control-Allow-Origin', '*');
-    ctx.response.set('Access-Control-Request-Method', 'GET, POST, PUT');
-    ctx.response.set(
-      'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept, Authorization'
     );
     return next();
   })
