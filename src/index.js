@@ -1,4 +1,5 @@
-if (process.env.NODE_ENV === 'development') process.env.JWT_SECRET = 'd';
+const production = process.env.NODE_ENV === 'production';
+if (!production) process.env.JWT_SECRET = 'd';
 
 import postgraphql from 'postgraphql';
 import Koa from 'koa';
@@ -7,7 +8,6 @@ import AWS from 'aws-sdk';
 import stripe from 'stripe';
 import path from 'path';
 import helmet from 'koa-helmet';
-import {createServer} from 'http';
 
 import notificationHandler from 'notificationHandler';
 import dbConfig from 'db';
@@ -35,21 +35,34 @@ app.context.s3 = new AWS.S3({
 
 app.context.stripe = stripe({});
 
+if (!production) {
+  app.use((ctx, next) => {
+    ctx.response.set('Access-Control-Allow-Origin', '*');
+    ctx.response.set('Access-Control-Allow-Credentials', true);
+    ctx.response.set('Access-Control-Request-Method', 'GET, POST, PUT');
+    ctx.response.set(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    );
+    return next();
+  });
+}
+
 app
   .use(helmet())
   .use(postgraphql(
     dbConfig.pg,
     [dbConfig.defaultSchema, 'auth'],
     {
-      enableCors: process.env.NODE_ENV === 'development',
+      enableCors: !production,
       exportJsonSchemaPath: path.resolve(__dirname, '..', 'schema.json'),
-      development: process.env.NODE_ENV === 'development',
+      development: !production,
       disableDefaultMutations: true,
-      disableQueryLog: process.env.NODE_ENV === 'production',
-      graphiql: process.env.NODE_ENV === 'development',
+      disableQueryLog: production,
+      graphiql: !production,
       jwtSecret: process.env.JWT_SECRET,
       pgDefaultRole: 'guest',
-      watchPg: process.env.NODE_ENV === 'development',
+      watchPg: !production,
       jwtPgTypeIdentifier: 'auth.jwt_claim'
     }
   ))
@@ -63,8 +76,4 @@ app
   .use(router.routes())
   .use(router.allowedMethods());
 
-const server = createServer(app.callback());
-
-notificationHandler(server);
-
-server.listen(8080);
+notificationHandler(app.listen(8080));

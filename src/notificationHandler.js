@@ -7,7 +7,7 @@ import pool from 'pool';
 
 export default async (server) => {
   const client = await pool.connect();
-  const io = new Io(server, {
+  const io = new Io(server, process.env.NODE_ENV === 'production' ? {} : {
     handlePreflightRequest: (req, res) => {
       res.writeHead(200, {
         'Access-Control-Allow-Headers': 'Content-Type, Authorization, restaurant',
