@@ -1,8 +1,8 @@
 import nodemailer from 'nodemailer';
 import showdown from 'showdown';
 
-import validation from 'validation.md';
-import validationTxt from 'validation.txt';
+import emailVerification from 'emailVerification.md';
+import emailVerificationTxt from 'emailVerification.txt';
 
 const converter = new showdown.Converter();
 
@@ -35,10 +35,10 @@ const compileMail = (mail, variables) =>
     mail
   );
 
-export const sendValidation = (to, variables) => transporter.sendMail({
+export const sendEmailVerification = (to, variables) => transporter.sendMail({
   subject: `Tervetuloa ${variables.firstName || ''}!`,
-  html: wrapHtml(converter.makeHtml(compileMail(validation, variables))),
-  text: compileMail(validationTxt, variables),
+  html: wrapHtml(converter.makeHtml(compileMail(emailVerification, variables))),
+  text: compileMail(emailVerificationTxt, variables),
   from: '"Walless" <walless@walless.fi>',
   to
 });

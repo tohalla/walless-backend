@@ -116,7 +116,7 @@ export default new Router({prefix: 'auth'})
         await mailer.sendMail({
           from: `"Walless" <walless@walless.fi>`,
           to: email,
-          subject: 'Walless account validation',
+          subject: '',
           text: resetToken
         });
         ctx.status = 201;

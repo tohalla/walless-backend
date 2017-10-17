@@ -1,3 +1,5 @@
+![Walless](https://walless.fi/assets/images/walless.png)
+
 Hei {{ firstName }},
 
 Kiitos että olet liittynyt Wallessin jäseneksi!
@@ -6,5 +8,5 @@ Me Wallesilla kyllästyimme jonottamaan ja odottamaan. Tämän vuoksi olemme tuo
 
 Vahvista vielä alla olevasta linkistä sähköpostiosoitteesi, jotta voit aloittaa tilaamisen.
 
-{{ validation }}
+[Vahvista sähköpostiosoite]({{ address }})
 

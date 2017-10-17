@@ -3,7 +3,7 @@ import koaBody from 'koa-body';
 
 import {defaultSchema} from 'db';
 import pool from 'pool';
-import {sendValidation} from 'mailer';
+import {sendEmailVerification} from 'mailer';
 
 export default new Router({prefix: 'account'})
   .post('/', koaBody(), async (ctx, next) => {
@@ -26,15 +26,15 @@ export default new Router({prefix: 'account'})
         'UPDATE auth.login SET password=$1::TEXT WHERE id = $2::INTEGER',
         [password, accountId]
       );
-      const {rows: [{token: validationToken}]} = await client.query(
-        'SELECT token FROM auth.validation_token WHERE account = $1::INTEGER',
-        [accountId]
+      const {rows: [{token}]} = await client.query(
+        'SELECT token FROM auth.email_verification_token WHERE email = $1::TEXT',
+        [email]
       );
-      await sendValidation(
+      await sendEmailVerification(
         email,
         {
           firstName,
-          validation: `https://walless.fi/validate?accountId=${accountId}&token=${validationToken}`
+          address: `https://walless.fi/verify?email=${email}&token=${token}`
         }
       );
       ctx.status = 201;
@@ -46,23 +46,23 @@ export default new Router({prefix: 'account'})
     }
     return next();
   })
-  .get('/validate', koaBody(), async (ctx, next) => {
-    const {query: {token, accountId}} = ctx.request;
+  .get('/verify', koaBody(), async (ctx, next) => {
+    const {query: {token, email}} = ctx.request;
     if (token) {
       const client = await pool.connect();
       try {
         const {rows: [valid]} = await client.query(
-          'SELECT auth.validation_token_exists($1::INTEGER, $2::TEXT)',
-          [accountId, token]
+          'SELECT auth.email_verification_token_exists($1::TEXT, $2::TEXT)',
+          [email, token]
         );
         if (valid) {
           await client.query(
-            'UPDATE auth.login SET VALIDATED = TRUE WHERE id = $1::INTEGER AND VALIDATED = FALSE',
-            [accountId]
+            `UPDATE ${defaultSchema}.account SET email_verified = TRUE WHERE email = $1::TEXT`,
+            [email]
           );
           await client.query(
-            'DELETE FROM auth.validation_token WHERE account = $1::INTEGER',
-            [accountId]
+            'DELETE FROM auth.email_verification_token WHERE email = $1::TEXT',
+            [email]
           );
           ctx.status = 202;
         } else {
