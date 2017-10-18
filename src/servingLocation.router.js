@@ -1,6 +1,6 @@
 import Router from 'koa-router';
 import koaBody from 'koa-body';
-import {template, times} from 'lodash/fp';
+import {template, times, get} from 'lodash/fp';
 import qr from 'qrcode';
 import pdf from 'html-pdf';
 import jwt from 'jsonwebtoken';
@@ -93,14 +93,17 @@ export default new Router({prefix: 'serving-location'})
         authorization.replace('Bearer ', ''),
         process.env.JWT_SECRET
       );
-      const {rows: [{allow_download_qr_codes: allowDownloadQR}]}= await client.query(`
+
+      console.log(accountId, restaurant);
+      if (!get(['rows', 0, 'allow_download_qr_codes'])(
+        await client.query(`
           SELECT allow_download_qr_codes FROM ${defaultSchema}.restaurant_account
             JOIN ${defaultSchema}.restaurant_role_rights ON restaurant_role_rights.id = restaurant_account.role
           WHERE restaurant_account.restaurant = $2::INTEGER AND account = $1::INTEGER
-        `,
-        [accountId, restaurant]
-      );
-      if (!allowDownloadQR) {
+          ORDER BY restaurant_role_rights.restaurant NULLS LAST LIMIT 1`,
+          [Number(accountId), Number(restaurant)]
+        )
+      )) {
         ctx.throw(401);
       }
       const {rows: servingLocations} = await client.query(
@@ -134,6 +137,7 @@ export default new Router({prefix: 'serving-location'})
       ctx.type = 'application/pdf';
       ctx.response.set('Content-Disposition', 'attachment;filename="qr.pdf"');
     } catch (error) {
+      console.log(error);
       ctx.status = error.status || 400;
     } finally {
       client.release();

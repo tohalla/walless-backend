@@ -35,15 +35,26 @@ app.context.s3 = new AWS.S3({
 
 app.context.stripe = stripe({});
 
+app.use((ctx, next) => {
+  ctx.response.set('Access-Control-Allow-Credentials', true);
+  ctx.response.set('Access-Control-Request-Method', 'GET, POST, PUT, OPTIONS');
+  ctx.response.set(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  );
+  return next();
+});
+
 if (!production) {
   app.use((ctx, next) => {
-    ctx.response.set('Access-Control-Allow-Origin', '*');
-    ctx.response.set('Access-Control-Allow-Credentials', true);
-    ctx.response.set('Access-Control-Request-Method', 'GET, POST, PUT');
     ctx.response.set(
-      'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-    );
+      'Access-Control-Allow-Origin',
+      'https://management.walless.fi');
+    return next();
+  });
+} else {
+  app.use((ctx, next) => {
+    ctx.response.set('Access-Control-Allow-Origin', '*');
     return next();
   });
 }

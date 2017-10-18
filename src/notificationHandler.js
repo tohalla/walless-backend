@@ -7,11 +7,12 @@ import pool from 'pool';
 
 export default async (server) => {
   const client = await pool.connect();
-  const io = new Io(server, process.env.NODE_ENV === 'production' ? {} : {
+  const io = new Io(server, {
     handlePreflightRequest: (req, res) => {
       res.writeHead(200, {
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, restaurant',
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, Restaurant',
+        'Access-Control-Allow-Origin': process.env.NODE_ENV === 'production' ?
+          'https://management.walless.fi' : 'http://localhost:3000',
         'Access-Control-Allow-Credentials': true
       });
       res.end();

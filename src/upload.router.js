@@ -25,6 +25,7 @@ export default new Router({prefix: '/upload'})
             SELECT allow_upload_image FROM ${defaultSchema}.restaurant_account
               JOIN ${defaultSchema}.restaurant_role_rights ON restaurant_role_rights.id = restaurant_account.role
             WHERE restaurant_account.restaurant = $2::INTEGER AND account = $1::INTEGER
+            ORDER BY restaurant_role_rights.restaurant NULLS LAST LIMIT 1
           `,
           [accountId, fields.restaurant]
         );
