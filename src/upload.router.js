@@ -2,6 +2,7 @@ import Router from 'koa-router';
 import sharp from 'sharp';
 import koaBody from 'koa-body';
 import jwt from 'jsonwebtoken';
+import {get} from 'lodash/fp';
 
 import {defaultSchema} from 'db';
 import pool from 'pool';
@@ -21,15 +22,16 @@ export default new Router({prefix: '/upload'})
           authorization.replace('Bearer ', ''),
           process.env.JWT_SECRET
         );
-        const {rows: [{allow_upload_image: allowUploadImage}]}= await client.query(`
+        if (!get(['rows', 0, 'allow_upload_image'])(
+          await client.query(`
             SELECT allow_upload_image FROM ${defaultSchema}.restaurant_account
               JOIN ${defaultSchema}.restaurant_role_rights ON restaurant_role_rights.id = restaurant_account.role
             WHERE restaurant_account.restaurant = $2::INTEGER AND account = $1::INTEGER
             ORDER BY restaurant_role_rights.restaurant NULLS LAST LIMIT 1
           `,
           [accountId, fields.restaurant]
-        );
-        if (!allowUploadImage) {
+        )
+        )) {
           ctx.throw(401);
         }
         const data = await Promise.all(Object.keys(files).reduce((prev, curr) =>

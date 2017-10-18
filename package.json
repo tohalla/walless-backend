@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "prebuild": "rm -rf dist && mkdir dist",
     "build": "babel src -d dist",
-    "start": "pm2 start ecosystem.config.js -i max --attach"
+    "start": "pm2 start ecosystem.config.js -i max"
   },
   "author": "Touko Hallasmaa",
   "devDependencies": {

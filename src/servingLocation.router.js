@@ -47,6 +47,7 @@ export default new Router({prefix: 'serving-location'})
         ctx.body = {servingLocation, restaurant};
         ctx.status = 201;
       } catch (error) {
+        console.log(error);
         ctx.status = error.status || 400;
       } finally {
         client.release();
@@ -94,14 +95,13 @@ export default new Router({prefix: 'serving-location'})
         process.env.JWT_SECRET
       );
 
-      console.log(accountId, restaurant);
       if (!get(['rows', 0, 'allow_download_qr_codes'])(
         await client.query(`
           SELECT allow_download_qr_codes FROM ${defaultSchema}.restaurant_account
             JOIN ${defaultSchema}.restaurant_role_rights ON restaurant_role_rights.id = restaurant_account.role
           WHERE restaurant_account.restaurant = $2::INTEGER AND account = $1::INTEGER
           ORDER BY restaurant_role_rights.restaurant NULLS LAST LIMIT 1`,
-          [Number(accountId), Number(restaurant)]
+          [accountId, restaurant]
         )
       )) {
         ctx.throw(401);
@@ -137,7 +137,6 @@ export default new Router({prefix: 'serving-location'})
       ctx.type = 'application/pdf';
       ctx.response.set('Content-Disposition', 'attachment;filename="qr.pdf"');
     } catch (error) {
-      console.log(error);
       ctx.status = error.status || 400;
     } finally {
       client.release();

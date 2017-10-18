@@ -8,6 +8,13 @@ import {defaultSchema} from 'db';
 import client from 'auth/client.router.js';
 import account from 'auth/account.router.js';
 
+const cookieConf = {
+  httpOnly: false,
+  overwrite: true,
+  domain: process.env.NODE_ENV === 'production' ?
+    '.walless.fi' : 'localhost'
+};
+
 export default new Router({prefix: 'auth'})
   .post('/', koaBody(), async (ctx, next) => {
     const {body: {email, password}} = ctx.request;
@@ -42,12 +49,6 @@ export default new Router({prefix: 'auth'})
           ctx.body = {token, wsToken, expiresAt: claim.exp, refreshToken};
           return next();
         }
-        const cookieConf = {
-          httpOnly: false,
-          overwrite: true,
-          domain: process.env.NODE_ENV === 'production' ?
-            '.walless.fi' : 'localhost'
-        };
         ctx.cookies.set('Authorization', token, cookieConf);
         ctx.cookies.set('ws-token', wsToken, cookieConf);
         ctx.cookies.set('Expiration', claim.exp, cookieConf);
@@ -141,11 +142,9 @@ export default new Router({prefix: 'auth'})
         subject: 'ws',
         audience: 'ws'
       });
-      ctx.body = {
-        token: renewedToken,
-        wsToken,
-        expiresAt: Date.now() / 1000 + 3600
-      };
+      ctx.cookies.set('Authorization', renewedToken, cookieConf);
+      ctx.cookies.set('ws-token', wsToken, cookieConf);
+      ctx.cookies.set('Expiration', Date.now() / 1000 + 3600, cookieConf);
     } catch (err) {
     }
   })
