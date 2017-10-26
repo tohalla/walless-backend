@@ -1,6 +1,7 @@
 import Router from 'koa-router';
 import jwt from 'jsonwebtoken';
 import koaBody from 'koa-body';
+import {get} from 'lodash/fp';
 
 import mailer from 'mailer';
 import pool from 'pool';
@@ -37,15 +38,15 @@ export default new Router({prefix: 'auth'})
           audience: 'ws'
         });
         if (ctx.header['client-id']) {
-          const {rows: [{refresh_token: refreshToken}]} = await client.query(
-            `
+          const refreshToken = get(['rows', 0, 'refresh_token'])(
+            await client.query(`
               UPDATE auth.client SET
                 account=$1::INTEGER, refresh_token = gen_random_uuid()
               WHERE id=$2::TEXT
               RETURNING refresh_token
             `,
             [claim.account_id, ctx.header['client-id']]
-          );
+          ));
           ctx.body = {token, wsToken, expiresAt: claim.exp, refreshToken};
           return next();
         }
@@ -55,6 +56,7 @@ export default new Router({prefix: 'auth'})
         ctx.redirect(ctx.headers.referer);
       } catch (err) {
         ctx.status = 401;
+        console.log(err);
         ctx.body = err;
       } finally {
         client.release();
@@ -145,7 +147,9 @@ export default new Router({prefix: 'auth'})
       ctx.cookies.set('Authorization', renewedToken, cookieConf);
       ctx.cookies.set('ws-token', wsToken, cookieConf);
       ctx.cookies.set('Expiration', Date.now() / 1000 + 3600, cookieConf);
+      ctx.status = 200;
     } catch (err) {
+      ctx.status = 401;
     }
   })
   .use(client.routes(), client.allowedMethods())

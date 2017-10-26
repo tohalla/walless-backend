@@ -15,7 +15,11 @@ export default new Router({prefix: 'client'})
           subject: 'postgraphql',
           audience: 'postgraphql'
         });
-        ctx.body = {token, expiresAt: claim.exp};
+        const wsToken = await jwt.sign({user: claim.account_id}, process.env.JWT_SECRET, {
+          subject: 'ws',
+          audience: 'ws'
+        });
+        ctx.body = {wsToken, token, expiresAt: claim.exp};
       } else {
         ctx.status = 401;
       }
