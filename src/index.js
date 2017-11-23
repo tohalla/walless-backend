@@ -45,16 +45,17 @@ app.use((ctx, next) => {
   return next();
 });
 
-if (!production) {
+if (production) {
   app.use((ctx, next) => {
     ctx.response.set(
       'Access-Control-Allow-Origin',
-      'https://management.walless.fi');
+      'https://management.walless.fi'
+    );
     return next();
   });
 } else {
   app.use((ctx, next) => {
-    ctx.response.set('Access-Control-Allow-Origin', '*');
+    ctx.response.set('Access-Control-Allow-Origin', 'http://localhost:3000');
     return next();
   });
 }
@@ -65,7 +66,6 @@ app
     dbConfig.pg,
     [dbConfig.defaultSchema, 'auth'],
     {
-      enableCors: !production,
       exportJsonSchemaPath: path.resolve(__dirname, '..', 'schema.json'),
       development: !production,
       disableDefaultMutations: true,
