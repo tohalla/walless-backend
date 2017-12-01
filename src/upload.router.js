@@ -8,7 +8,7 @@ import {defaultSchema} from 'db';
 import pool from 'pool';
 
 const uploadParams = {
-  Bucket: 'walless-uploads',
+  Bucket: 'walless-upload',
   ACL: 'public-read'
 };
 

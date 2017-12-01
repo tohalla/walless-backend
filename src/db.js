@@ -15,6 +15,6 @@ const pool = {
 module.exports = {
   pg: Object.assign({}, pool, connection),
   defaultSchema: process.env.DB_DEFAULT_SCHEMA || 'walless',
-  cdn: 'https://walless-uploads.nyc3.digitaloceanspaces.com'
+  cdn: 'https://walless-upload.ams3.digitaloceanspaces.com'
 };
 

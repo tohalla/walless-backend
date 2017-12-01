@@ -26,7 +26,7 @@
     "babel-plugin-transform-es2015-shorthand-properties": "^6.24.1",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "eslint": "^4.12.0",
+    "eslint": "^4.12.1",
     "eslint-config-google": "^0.9.1",
     "eslint-plugin-babel": "^4.0.0",
     "eslint-plugin-import": "^2.2.0",
@@ -35,7 +35,7 @@
     "tape": "^4.6.0"
   },
   "dependencies": {
-    "aws-sdk": "^2.157.0",
+    "aws-sdk": "^2.161.0",
     "html-pdf": "^2.1.0",
     "humps": "^2.0.0",
     "immutable": "^3.8.1",
@@ -47,10 +47,10 @@
     "nodemailer": "^4.0.1",
     "pg": "^7.0.0",
     "pg-pool": "^2.0.0",
-    "postgraphql": "3",
+    "postgraphql": "3.5.4",
     "qrcode": "^1.0.0",
     "sharp": "^0.18.0",
-    "showdown": "^1.7.6",
+    "showdown": "^1.8.3",
     "socket.io": "^2.0.3",
     "stripe": "^5.0.0"
   },

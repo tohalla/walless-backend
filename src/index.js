@@ -25,11 +25,11 @@ const router = new Router()
 const app = new Koa();
 
 app.context.s3 = new AWS.S3({
-  region: 'nyc3',
-  accessKeyId: '4FK6DU2ZL4KDZUSH2FVM',
-  secretAccessKey: 'pnF+wi82m4ecW2K0xv0J79X3VS5aO1CTz5VnoNjsdr4',
+  region: 'ams3',
+  accessKeyId: 'UQ6NJVP2VPAPOYICXLLJ',
+  secretAccessKey: '02Elq/AkKd1/cXD5bmDjGLG4lNuuguMcuTAtRma95MI',
   endpoint: {
-    hostname: 'nyc3.digitaloceanspaces.com'
+    hostname: 'ams3.digitaloceanspaces.com'
   }
 });
 
