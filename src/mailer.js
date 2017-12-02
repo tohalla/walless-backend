@@ -3,6 +3,8 @@ import showdown from 'showdown';
 
 import emailVerification from 'emailVerification.md';
 import emailVerificationTxt from 'emailVerification.txt';
+import emailResetPassword from 'emailResetPassword.md';
+import emailResetPasswordTxt from 'emailResetPassword.txt';
 
 const converter = new showdown.Converter();
 
@@ -39,6 +41,14 @@ export const sendEmailVerification = (to, variables) => transporter.sendMail({
   subject: `Tervetuloa ${variables.firstName || ''}!`,
   html: wrapHtml(converter.makeHtml(compileMail(emailVerification, variables))),
   text: compileMail(emailVerificationTxt, variables),
+  from: '"Walless" <walless@walless.fi>',
+  to
+});
+
+export const sendEmailPasswordReset = (to, variables) => transporter.sendMail({
+  subject: 'Salasanan palautus',
+  html: wrapHtml(converter.makeHtml(compileMail(emailResetPassword, variables))),
+  text: compileMail(emailResetPasswordTxt, variables),
   from: '"Walless" <walless@walless.fi>',
   to
 });

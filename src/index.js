@@ -17,10 +17,14 @@ import upload from 'upload.router';
 import servingLocation from './servingLocation.router';
 
 const router = new Router()
-  .use(auth.routes(), auth.allowedMethods())
-  .use(translation.routes(), translation.allowedMethods())
-  .use(upload.routes(), upload.allowedMethods())
-  .use(servingLocation.routes(), servingLocation.allowedMethods());
+  .use(auth.routes())
+  .use(auth.allowedMethods())
+  .use(translation.routes())
+  .use(translation.allowedMethods())
+  .use(upload.routes())
+  .use(upload.allowedMethods())
+  .use(servingLocation.routes())
+  .use(servingLocation.allowedMethods());
 
 const app = new Koa();
 

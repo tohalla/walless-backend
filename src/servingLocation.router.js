@@ -146,14 +146,8 @@ export default new Router({prefix: 'serving-location'})
     const {params: {code}} = ctx;
     const {servingLocationId, key} = JSON.parse(new Buffer(code, 'base64').toString('ascii'));
     if (servingLocationId && key) {
-      try {
-        if (!isValid(servingLocationId, key)) {
-          throw Error({status: 400});
-        }
-        ctx.body = code;
-      } catch (error) {
-        ctx.status = error.status || 400;
-      }
+      if (!isValid(servingLocationId, key)) ctx.throw(400);
+      ctx.body = code;
     } else {
       ctx.status = 400;
     }
