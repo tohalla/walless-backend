@@ -5,9 +5,10 @@
   "main": "src/index.js",
   "private": true,
   "scripts": {
+    "pretest": "npm run lint",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "NODE_ENV=development nodemon --exec babel-node $npm_package_main",
-    "lint": "eslint .",
+    "lint": "eslint . --fix  --ignore-path .gitignore",
     "prebuild": "rm -rf dist && mkdir dist",
     "build": "babel src -d dist",
     "start": "pm2 start ecosystem.config.js -i max"
@@ -29,6 +30,7 @@
     "eslint": "^4.12.1",
     "eslint-config-google": "^0.9.1",
     "eslint-plugin-babel": "^4.0.0",
+    "eslint-plugin-flowtype": "^2.39.1",
     "eslint-plugin-import": "^2.2.0",
     "flow-bin": "^0.59.0",
     "nodemon": "^1.10.2",

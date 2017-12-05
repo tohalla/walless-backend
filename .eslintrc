@@ -1,0 +1,34 @@
+{
+  "settings": {
+    "import/parser": "babel-eslint",
+    "import/resolver": { "node": { "extensions": [".js", ".jsx"] } }
+  },
+  "extends": ["google", "plugin:flowtype/recommended"],
+  "globals": {
+    "Promise": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "plugins": ["babel", "import", "flowtype"],
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "parser": "babel-eslint",
+  "rules": {
+    "require-jsdoc": 0,
+    "space-before-function-paren": 0,
+    "arrow-parens": 0,
+    "no-invalid-this": 0,
+    "semi": 0,
+    "new-cap": 0,
+    "object-curly-spacing": 0,
+    "babel/new-cap": 1,
+    "babel/no-invalid-this": 1,
+    "babel/semi": 1,
+    "comma-dangle": [2, "never"],
+    "max-len": 0
+  }
+}

@@ -159,8 +159,7 @@ export default new Router({prefix: 'auth'})
   })
   .post('/renewToken', async (ctx, next) => {
     const token = ctx.header.authorization
-      ? ctx.header.authorizationation.replace('Bearer ', '')
-      : null;
+      && ctx.header.authorization.replace('Bearer ', '');
     try {
       const decoded = await jwt.verify(token, process.env.JWT_SECRET);
       const renewedToken = await jwt.sign(
