@@ -13,7 +13,7 @@ export default async (server) => {
   const io = new Io(server, {
     handlePreflightRequest: (req, res) => {
       res.writeHead(200, {
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, Restaurant',
+        'Access-Control-Allow-Headers': 'Content-Type, authorization, restaurant',
         'Access-Control-Allow-Origin': process.env.NODE_ENV === 'production' ?
           'https://management.walless.fi' : 'http://localhost:3000',
         'Access-Control-Allow-Credentials': true

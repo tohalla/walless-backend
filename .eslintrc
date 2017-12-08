@@ -24,7 +24,7 @@
     "no-invalid-this": 0,
     "semi": 0,
     "new-cap": 0,
-    "object-curly-spacing": 0,
+    "object-curly-spacing": [2, "never"],
     "babel/new-cap": 1,
     "babel/no-invalid-this": 1,
     "babel/semi": 1,

@@ -44,7 +44,7 @@ app.use((ctx, next) => {
   ctx.response.set('Access-Control-Request-Method', 'GET, POST, PUT, OPTIONS');
   ctx.response.set(
     'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization, Client-Id'
+    'Origin, X-Requested-With, Content-Type, Accept, authorization, client-id'
   );
   return next();
 });

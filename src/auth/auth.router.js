@@ -50,13 +50,13 @@ export default new Router({prefix: 'auth'})
           ctx.body = {token, wsToken, expiresAt: claim.exp, refreshToken};
           return next();
         }
-        ctx.cookies.set('Authorization', token, cookieConf);
+        ctx.cookies.set('authorization', token, cookieConf);
         ctx.cookies.set('ws-token', wsToken, cookieConf);
-        ctx.cookies.set('Expiration', claim.exp, cookieConf);
+        ctx.cookies.set('expiration', claim.exp, cookieConf);
         ctx.redirect(ctx.headers.referer);
       } catch ({message}) {
         ctx.status = 401;
-        ctx.cookies.set('Error', message, cookieConf);
+        ctx.cookies.set('error', message, cookieConf);
         ctx.redirect(ctx.headers.referer);
       } finally {
         client.release();
@@ -178,9 +178,9 @@ export default new Router({prefix: 'auth'})
           audience: 'ws'
         }
       );
-      ctx.cookies.set('Authorization', renewedToken, cookieConf);
+      ctx.cookies.set('authorization', renewedToken, cookieConf);
       ctx.cookies.set('ws-token', wsToken, cookieConf);
-      ctx.cookies.set('Expiration', Date.now() / 1000 + 3600, cookieConf);
+      ctx.cookies.set('expiration', Date.now() / 1000 + 3600, cookieConf);
       ctx.status = 200;
     } catch (err) {
       ctx.status = 401;
