@@ -22,7 +22,7 @@ const isValid = async (servingLocationId, key, client) => {
   );
   return exists;
 };
-export default new Router({prefix: 'serving-location'})
+export default new Router({prefix: '/serving-location'})
   .post('/', koaBody(), async (ctx, next) => {
     const {header: {authorization}, request: {body: {code}}} = ctx;
     const {account_id: accountId} = authorization ? await jwt.verify(

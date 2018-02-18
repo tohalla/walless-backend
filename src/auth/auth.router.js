@@ -15,7 +15,7 @@ const cookieConf = {
   domain: process.env.NODE_ENV === 'production' ? '.walless.fi' : 'localhost'
 };
 
-export default new Router({prefix: 'auth'})
+export default new Router({prefix: '/auth'})
   .post('/', koaBody(), async (ctx, next) => {
     const {body: {email, password}} = ctx.request;
     if (email && password) {
