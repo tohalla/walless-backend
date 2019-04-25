@@ -30,8 +30,8 @@ const app = new Koa();
 
 app.context.s3 = new AWS.S3({
   region: 'ams3',
-  accessKeyId: 'UQ6NJVP2VPAPOYICXLLJ',
-  secretAccessKey: '02Elq/AkKd1/cXD5bmDjGLG4lNuuguMcuTAtRma95MI',
+  accessKeyId: process.env.S3_ACCESS,
+  secretAccessKey: process.env.S3_SECRET,
   endpoint: {
     hostname: 'ams3.digitaloceanspaces.com'
   }
